@@ -14,36 +14,36 @@
 
 @layer base {
   :root {
-    --background: 60 7% 91%;
+    --background: 55 33% 95%;
     --foreground: 55 47% 17%;
 
-    --card: 60 7% 91%;
+    --card: 55 33% 95%;
     --card-foreground: 55 47% 17%;
     --card-secondary: 217 22% 71%;
 
-    --popover: 60 7% 91%;
+    --popover: 55 33% 95%;
     --popover-foreground: 55 47% 17%;
 
     --primary: 240 25% 44%;
-    --primary-foreground: 60 7% 91%;
+    --primary-foreground: 55 33% 95%;
 
     --secondary: 217 22% 71%;
     --secondary-foreground: 55 47% 17%;
 
-    --muted: 60 7% 85%;
+    --muted: 55 25% 90%;
     --muted-foreground: 55 30% 35%;
 
     --accent: 11 68% 43%;
-    --accent-foreground: 60 7% 91%;
+    --accent-foreground: 55 33% 95%;
 
     --destructive: 11 68% 43%;
-    --destructive-foreground: 60 7% 91%;
+    --destructive-foreground: 55 33% 95%;
 
     --border: 55 47% 17%;
     --input: 55 47% 17%;
     --ring: 240 25% 44%;
 
-    --radius: 0px;
+    --radius: 9999px;
 
     --shadow-offset: 4px 4px 0px;
     --shadow-color: 55 47% 17%;
@@ -53,23 +53,23 @@
   }
 
   .dark {
-    --background: 60 7% 91%;
+    --background: 55 33% 95%;
     --foreground: 55 47% 17%;
-    --card: 60 7% 91%;
+    --card: 55 33% 95%;
     --card-foreground: 55 47% 17%;
     --card-secondary: 217 22% 71%;
-    --popover: 60 7% 91%;
+    --popover: 55 33% 95%;
     --popover-foreground: 55 47% 17%;
     --primary: 240 25% 44%;
-    --primary-foreground: 60 7% 91%;
+    --primary-foreground: 55 33% 95%;
     --secondary: 217 22% 71%;
     --secondary-foreground: 55 47% 17%;
-    --muted: 60 7% 85%;
+    --muted: 55 25% 90%;
     --muted-foreground: 55 30% 35%;
     --accent: 11 68% 43%;
-    --accent-foreground: 60 7% 91%;
+    --accent-foreground: 55 33% 95%;
     --destructive: 11 68% 43%;
-    --destructive-foreground: 60 7% 91%;
+    --destructive-foreground: 55 33% 95%;
     --border: 55 47% 17%;
     --input: 55 47% 17%;
     --ring: 240 25% 44%;
@@ -88,14 +88,14 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.06em;
   }
 }
 
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.06em;
   }
 
   .font-body {
