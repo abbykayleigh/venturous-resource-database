@@ -58,49 +58,45 @@ const Index = () => {
   // Landing
   if (mode === "landing") {
     return (
-      <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#FAFAF1' }}>
-        {/* Hero */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-20 pb-10 text-center">
-          <h1 className="font-display text-5xl md:text-7xl lg:text-[110px] font-medium tracking-[-0.06em] leading-[0.82] mb-5 max-w-5xl">
-            Get support with
-            <br />
-            difficult emotions
-            <br />
-            + situations
-          </h1>
+      <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
+        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-16 pb-12">
+          <div className="max-w-3xl w-full border border-border rounded-2xl p-8 md:p-12 text-center" style={{ backgroundColor: '#FAFAF1' }}>
+            <h1 className="font-display text-5xl md:text-7xl lg:text-[110px] font-medium tracking-[-0.06em] leading-[0.82] mb-5">
+              Get support with
+              <br />
+              difficult emotions
+              <br />
+              + situations
+            </h1>
 
-          <p className="font-body text-base md:text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
-            With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
-          </p>
+            <p className="font-body text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-6 leading-relaxed">
+              With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-center mb-12">
-            <button
-              onClick={() => setMode("quiz")}
-              disabled={filtersLoading}
-              className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2"
-            >
-              {filtersLoading ? "Loading..." : "Take the Quiz"}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => setMode("search")}
-              className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2"
-            >
-              <Search className="w-4 h-4" />
-              Search Resources
-            </button>
-          </div>
-        </div>
-
-        {/* Info box */}
-        <div className="px-6 md:px-16 lg:px-24 pb-12">
-          <div className="max-w-3xl mx-auto border border-border rounded-2xl p-8 md:p-12" style={{ backgroundColor: '#FAFAF1' }}>
-            <p className="font-body text-base md:text-lg text-foreground leading-relaxed mb-6 text-center">
+            <p className="font-body text-base md:text-lg text-foreground leading-relaxed mb-8 max-w-2xl mx-auto">
               <span className="font-display text-2xl md:text-3xl font-medium tracking-[-0.04em] block mb-4">Over 860 resources + growing!</span>
               Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
             </p>
 
-            <div className="border-t border-border pt-6 mb-6 text-center">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-10">
+              <button
+                onClick={() => setMode("quiz")}
+                disabled={filtersLoading}
+                className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2"
+              >
+                {filtersLoading ? "Loading..." : "Get Matched with Resources"}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
+                onClick={() => setMode("search")}
+                className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2"
+              >
+                <Search className="w-4 h-4" />
+                Search Resources
+              </button>
+            </div>
+
+            <div className="border-t border-border pt-6 mb-6">
               <h3 className="font-display text-xl md:text-2xl font-medium tracking-[-0.04em] mb-3">Want personalized support?</h3>
               <p className="font-body text-base text-muted-foreground leading-relaxed">
                 We'll match you with your best-fit counsellor so you can address whatever is keeping you from your wellness.
@@ -108,7 +104,7 @@ const Index = () => {
             </div>
 
             <div className="border-t border-border pt-6">
-              <p className="font-body text-xs text-muted-foreground leading-relaxed text-center">
+              <p className="font-body text-xs text-muted-foreground leading-relaxed">
                 Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please book a free consultation with one of our counsellors at{" "}
                 <a href="https://venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">VenturousCounselling.com</a>.
                 {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
