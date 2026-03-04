@@ -23,6 +23,18 @@ export function Quiz({ filterOptions, onComplete }: QuizProps) {
     );
   };
 
+  const selectAll = (
+    options: string[],
+    current: string[],
+    setter: (v: string[]) => void
+  ) => {
+    if (current.length === options.length) {
+      setter([]);
+    } else {
+      setter([...options]);
+    }
+  };
+
   const handleComplete = () => {
     const filters: QuizFilters = {};
     if (demographics.length > 0) filters.demographics = demographics;
@@ -36,11 +48,12 @@ export function Quiz({ filterOptions, onComplete }: QuizProps) {
       <QuizQuestion
         questionNumber={1}
         totalQuestions={3}
-        title="What describes you best?"
+        title="Which best describes who this resource is for?"
         subtitle="Select all that apply, or skip to see everything."
         options={filterOptions.demographics}
         selected={demographics}
         onToggle={(o) => toggle(demographics, setDemographics, o)}
+        onSelectAll={() => selectAll(filterOptions.demographics, demographics, setDemographics)}
         onNext={() => setStep(1)}
       />
     );
@@ -51,13 +64,15 @@ export function Quiz({ filterOptions, onComplete }: QuizProps) {
       <QuizQuestion
         questionNumber={2}
         totalQuestions={3}
-        title="What are you looking for support with?"
-        subtitle="Choose the areas that matter most to you."
+        title="What are you seeking support for?"
+        subtitle="Select all that apply — choose as many as you need."
         options={filterOptions.categoryTags}
         selected={categoryTags}
         onToggle={(o) => toggle(categoryTags, setCategoryTags, o)}
+        onSelectAll={() => selectAll(filterOptions.categoryTags, categoryTags, setCategoryTags)}
         onNext={() => setStep(2)}
         onBack={() => setStep(0)}
+        multiSelect
       />
     );
   }
@@ -66,14 +81,16 @@ export function Quiz({ filterOptions, onComplete }: QuizProps) {
     <QuizQuestion
       questionNumber={3}
       totalQuestions={3}
-      title="What type of resource?"
-      subtitle="Filter by format — or skip to see all types."
+      title="What kind of resources are you looking for?"
+      subtitle="Select all that apply — choose as many as you need."
       options={filterOptions.resourceTypes}
       selected={resourceTypes}
       onToggle={(o) => toggle(resourceTypes, setResourceTypes, o)}
+      onSelectAll={() => selectAll(filterOptions.resourceTypes, resourceTypes, setResourceTypes)}
       onNext={handleComplete}
       onBack={() => setStep(1)}
       isLast
+      multiSelect
     />
   );
 }

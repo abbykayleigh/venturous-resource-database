@@ -8,9 +8,11 @@ interface QuizQuestionProps {
   options: string[];
   selected: string[];
   onToggle: (option: string) => void;
+  onSelectAll: () => void;
   onNext: () => void;
   onBack?: () => void;
   isLast?: boolean;
+  multiSelect?: boolean;
 }
 
 export function QuizQuestion({
@@ -21,43 +23,66 @@ export function QuizQuestion({
   options,
   selected,
   onToggle,
+  onSelectAll,
   onNext,
   onBack,
   isLast = false,
+  multiSelect = false,
 }: QuizQuestionProps) {
+  const allSelected = options.length > 0 && selected.length === options.length;
+
   return (
     <div className="min-h-screen flex flex-col justify-center px-6 py-16 md:px-16 lg:px-24 text-center">
       <div className="max-w-5xl mx-auto w-full">
+        {/* Progress */}
         <p className="font-body text-sm uppercase tracking-widest text-muted-foreground mb-4">
           {questionNumber} / {totalQuestions}
         </p>
 
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.06em] mb-4 leading-[0.95]">
-          {title}
-        </h1>
+        {/* Rounded outline box */}
+        <div className="border border-border rounded-2xl p-8 md:p-12 mb-8" style={{ backgroundColor: '#FAFAF1' }}>
+          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-medium tracking-[-0.06em] mb-3 leading-[0.88]">
+            {title}
+          </h1>
 
-        <p className="font-body text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-          {subtitle}
-        </p>
+          <p className="font-body text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+            {subtitle}
+          </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
-          {options.map((option) => {
-            const isSelected = selected.includes(option);
-            return (
-              <button
-                key={option}
-                onClick={() => onToggle(option)}
-                className={cn(
-                  "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl",
-                  isSelected
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-                )}
-              >
-                {option}
-              </button>
-            );
-          })}
+          {/* Select All button */}
+          <div className="mb-6">
+            <button
+              onClick={onSelectAll}
+              className={cn(
+                "border border-border px-6 py-2.5 font-body text-sm font-semibold transition-all duration-150 rounded-full",
+                allSelected
+                  ? "bg-primary text-primary-foreground shadow-brutal-sm"
+                  : "bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none shadow-brutal-sm"
+              )}
+            >
+              {allSelected ? "Deselect All" : "Select All"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {options.map((option) => {
+              const isSelected = selected.includes(option);
+              return (
+                <button
+                  key={option}
+                  onClick={() => onToggle(option)}
+                  className={cn(
+                    "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl",
+                    isSelected
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                  )}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="flex gap-4 justify-center">
