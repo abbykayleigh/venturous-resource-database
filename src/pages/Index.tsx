@@ -6,6 +6,7 @@ import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
 import { ArrowRight, Search } from "lucide-react";
+import venturousLogo from "@/assets/venturous-logo.png";
 
 type AppMode = "landing" | "quiz" | "results" | "search";
 
@@ -61,24 +62,18 @@ const Index = () => {
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
         <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-12 pb-10">
           <div className="max-w-6xl w-full border border-border rounded-2xl p-8 md:p-10 lg:p-14" style={{ backgroundColor: '#FAFAF1' }}>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-center">
+            <h1 className="font-display text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
               Get support with
               <br />
               difficult emotions + situations
             </h1>
 
-            <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed text-center">
+            <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed text-left">
               With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
             </p>
 
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start mb-8">
-              <div className="flex-1 text-left">
-                <span className="font-display text-xl md:text-2xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
-                <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
-                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
+              <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
@@ -95,37 +90,64 @@ const Index = () => {
                   Search Resources
                 </button>
               </div>
+              <div className="flex-1 text-left order-1 md:order-2">
+                <span className="font-display text-xl md:text-2xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
+                <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
+                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
+                </p>
+              </div>
             </div>
 
             <div className="border-t border-border pt-6 mb-5">
               <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
-                <div className="flex-1 text-left">
-                  <h3 className="font-display text-lg md:text-xl font-medium tracking-[-0.06em] leading-[0.82] mb-2">Want personalized support?</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                    We'll match you with your best-fit counsellor so you can address whatever is keeping you from your wellness.
-                  </p>
-                </div>
-                <div className="shrink-0 w-full md:w-auto">
+                <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
+                  <a
+                    href="https://www.venturouscounselling.com/about/find-a-therapist/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center"
+                  >
+                    Connect with a Counsellor
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
                   <a
                     href="https://form.questionscout.com/662832229f4173275fe73547"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center"
                   >
                     Get Matched with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>
+                <div className="flex-1 text-left order-1 md:order-2">
+                  <h3 className="font-display text-lg md:text-xl font-medium tracking-[-0.06em] leading-[0.82] mb-2">Want personalized support?</h3>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                    Finding the right counsellor isn't a small thing. It's the thing.
+                  </p>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                    Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
+                  </p>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                    Our team works with youth, adults, and relationships across Vancouver and Port Moody.
+                  </p>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                    Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="border-t border-border pt-5">
-              <p className="font-body text-xs text-muted-foreground leading-relaxed text-left">
+            <div className="border-t border-border pt-5 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
+              <p className="font-body text-xs text-muted-foreground leading-relaxed text-left flex-1">
                 Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please book a free consultation with one of our counsellors at{" "}
                 <a href="https://venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">VenturousCounselling.com</a>.
                 {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
                 <a href="https://database.venturouscounselling.com/privacy_policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">privacy policy here</a>.
               </p>
+              <a href="https://www.venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="shrink-0">
+                <img src={venturousLogo} alt="Venturous Counselling + Consulting" className="h-8 md:h-10 w-auto" />
+              </a>
             </div>
           </div>
         </div>
