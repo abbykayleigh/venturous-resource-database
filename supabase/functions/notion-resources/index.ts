@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const DATABASE_ID = 'f9fad373547c4a73896fe9c3149a5b51';
+    const DATABASE_ID = '10c672f2adc04f3a9d3b272251bafd77';
     const { action, filters, searchQuery } = await req.json();
 
     if (action === 'get-filter-options') {
