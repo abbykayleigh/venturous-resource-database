@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["'Playfair Display'", "serif"],
+        display: ["'Domaine Display'", "serif"],
         body: ["'Manrope'", "sans-serif"],
       },
       colors: {
