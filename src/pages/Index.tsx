@@ -59,26 +59,24 @@ const Index = () => {
   if (mode === "landing") {
     return (
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
-        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-16 pb-12">
-          <div className="max-w-3xl w-full border border-border rounded-2xl p-8 md:p-12 text-center" style={{ backgroundColor: '#FAFAF1' }}>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-[110px] font-medium tracking-[-0.06em] leading-[0.82] mb-5">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-12 pb-10">
+          <div className="max-w-5xl w-full border border-border rounded-2xl p-8 md:p-10 lg:p-14 text-center" style={{ backgroundColor: '#FAFAF1' }}>
+            <h1 className="font-display text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4">
               Get support with
               <br />
-              difficult emotions
-              <br />
-              + situations
+              difficult emotions + situations
             </h1>
 
-            <p className="font-body text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-6 leading-relaxed">
+            <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-5 leading-relaxed">
               With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
             </p>
 
-            <p className="font-body text-base md:text-lg text-foreground leading-relaxed mb-8 max-w-2xl mx-auto">
-              <span className="font-display text-2xl md:text-3xl font-medium tracking-[-0.04em] block mb-4">Over 860 resources + growing!</span>
+            <p className="font-body text-base md:text-lg text-foreground leading-relaxed mb-6 max-w-3xl mx-auto">
+              <span className="font-display text-xl md:text-2xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
               Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-10">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-8">
               <button
                 onClick={() => setMode("quiz")}
                 disabled={filtersLoading}
@@ -96,14 +94,22 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="border-t border-border pt-6 mb-6">
-              <h3 className="font-display text-xl md:text-2xl font-medium tracking-[-0.04em] mb-3">Want personalized support?</h3>
-              <p className="font-body text-base text-muted-foreground leading-relaxed">
+            <div className="border-t border-border pt-5 mb-5">
+              <h3 className="font-display text-lg md:text-xl font-medium tracking-[-0.06em] leading-[0.82] mb-2">Want personalized support?</h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3">
                 We'll match you with your best-fit counsellor so you can address whatever is keeping you from your wellness.
               </p>
+              <a
+                href="https://form.questionscout.com/662832229f4173275fe73547"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block border border-border px-6 py-2.5 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
+              >
+                Get Matched with a Counsellor
+              </a>
             </div>
 
-            <div className="border-t border-border pt-6">
+            <div className="border-t border-border pt-5">
               <p className="font-body text-xs text-muted-foreground leading-relaxed">
                 Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please book a free consultation with one of our counsellors at{" "}
                 <a href="https://venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">VenturousCounselling.com</a>.
