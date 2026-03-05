@@ -27,7 +27,6 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
     large: "md:col-span-2 md:row-span-2",
   };
 
-  // If no Notion image, try Microlink
   useEffect(() => {
     if (!resource.image && resource.link) {
       fetch(`https://api.microlink.io?url=${encodeURIComponent(resource.link)}`)
@@ -95,14 +94,19 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
         </div>
 
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
+          <div className="flex flex-wrap gap-2 mb-3">
             {tags.map((tag, i) => {
               const color = TAG_COLORS[i % TAG_COLORS.length];
               return (
                 <span
                   key={tag}
-                  className="inline-block px-2.5 py-0.5 text-xs font-body font-semibold uppercase tracking-wider rounded-full"
-                  style={{ backgroundColor: color.bg, color: color.text }}
+                  className="inline-block font-body font-semibold uppercase tracking-wider rounded-full"
+                  style={{
+                    backgroundColor: color.bg,
+                    color: color.text,
+                    fontSize: '0.7rem',
+                    padding: '4px 12px',
+                  }}
                 >
                   {tag}
                 </span>
