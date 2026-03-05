@@ -5,7 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
-import { Search, Loader2, Users, Heart } from "lucide-react";
+import { Search, Loader2, Users, Heart, MessageCircle } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -29,9 +29,9 @@ const LoadingCards = () =>
     )}
   </div>;
 
-// Counter animation hook
-function useCountUp(target: number, duration: number = 2000) {
-  const [count, setCount] = useState(0);
+// Counter animation hook — counts from start to target
+function useCountUp(start: number, target: number, duration: number = 1200) {
+  const [count, setCount] = useState(start);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -51,14 +51,15 @@ function useCountUp(target: number, duration: number = 2000) {
   useEffect(() => {
     if (!started) return;
     let startTime: number;
+    const range = target - start;
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
+      setCount(Math.floor(start + progress * range));
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-  }, [started, target, duration]);
+  }, [started, target, start, duration]);
 
   return { count, ref };
 }
@@ -69,7 +70,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeResultFilters, setActiveResultFilters] = useState<QuizFilters>({});
 
-  const { count: resourceCount, ref: counterRef } = useCountUp(860);
+  const { count: resourceCount, ref: counterRef } = useCountUp(850, 860);
 
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
@@ -145,7 +146,9 @@ const Index = () => {
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
                   className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
-                  {filtersLoading ? "Loading..." : "Get Matched with Resources"}
+                  {filtersLoading
+                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</>
+                    : "Get Matched with Resources"}
                 </button>
                 <button
                   onClick={() => setMode("search")}
@@ -166,7 +169,7 @@ const Index = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-base font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
-                    <Users className="w-4 h-4 shrink-0" />
+                    <MessageCircle className="w-4 h-4 shrink-0" />
                     Connect with a Counsellor
                   </a>
                   <a
@@ -235,11 +238,18 @@ const Index = () => {
           <button onClick={handleReset}>
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
           </button>
-          <button
-            onClick={() => { setMode("quiz"); setSearchQuery(""); }}
-            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-            Take Quiz
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleReset}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Back to Start
+            </button>
+            <button
+              onClick={() => { setMode("quiz"); setSearchQuery(""); }}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Take Quiz
+            </button>
+          </div>
         </header>
 
         <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 max-w-2xl mx-auto">
