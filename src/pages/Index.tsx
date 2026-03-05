@@ -170,7 +170,7 @@ const Index = () => {
             <div className="border-t border-border pt-5 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
               <p className="font-body text-xs text-muted-foreground leading-relaxed text-left flex-1">
                 Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please book a free consultation with one of our counsellors at{" "}
-                <a href="https://venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">VenturousCounselling.com</a>.
+                <a target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors" href="https://venturous.janeapp.com/">​</a>.
                 {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
                 <a href="https://database.venturouscounselling.com/privacy_policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">privacy policy here</a>.
               </p>
