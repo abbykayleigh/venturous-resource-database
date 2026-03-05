@@ -1,6 +1,6 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 Deno.serve(async (req) => {
@@ -20,8 +20,16 @@ Deno.serve(async (req) => {
     const DATABASE_ID = '10c672f2adc04f3a9d3b272251bafd77';
     const { action, filters, searchQuery } = await req.json();
 
+    // Base filter: Capture=true AND To Be Confirmed=false
+    const baseFilter = {
+      and: [
+        { property: 'Capture', checkbox: { equals: true } },
+        { property: 'To Be Confirmed', checkbox: { equals: false } },
+      ] as any[],
+    };
+
     if (action === 'get-filter-options') {
-      const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID);
+      const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID, baseFilter);
       const demographics = new Set<string>();
       const categoryTags = new Set<string>();
       const resourceTypes = new Set<string>();
@@ -38,7 +46,6 @@ Deno.serve(async (req) => {
             categoryTags.add(item.name);
           }
         }
-        // Resource Type is multi_select
         if (props['Resource Type']?.multi_select) {
           for (const item of props['Resource Type'].multi_select) {
             resourceTypes.add(item.name);
@@ -56,29 +63,38 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'query') {
-      const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID);
-      let results = allEntries;
+      // Build Notion filter with quiz selections pushed server-side
+      const notionFilter = { and: [...baseFilter.and] };
 
       if (filters) {
         if (filters.demographics?.length > 0) {
-          results = results.filter((page: any) => {
-            const vals = page.properties.Demographics?.multi_select?.map((s: any) => s.name) || [];
-            return filters.demographics.some((d: string) => vals.includes(d));
-          });
+          notionFilter.and.push({
+            or: filters.demographics.map((d: string) => ({
+              property: 'Demographics',
+              multi_select: { contains: d },
+            })),
+          } as any);
         }
         if (filters.categoryTags?.length > 0) {
-          results = results.filter((page: any) => {
-            const vals = page.properties['Category Tags']?.multi_select?.map((s: any) => s.name) || [];
-            return filters.categoryTags.some((c: string) => vals.includes(c));
-          });
+          notionFilter.and.push({
+            or: filters.categoryTags.map((c: string) => ({
+              property: 'Category Tags',
+              multi_select: { contains: c },
+            })),
+          } as any);
         }
         if (filters.resourceTypes?.length > 0) {
-          results = results.filter((page: any) => {
-            const vals = page.properties['Resource Type']?.multi_select?.map((s: any) => s.name) || [];
-            return filters.resourceTypes.some((r: string) => vals.includes(r));
-          });
+          notionFilter.and.push({
+            or: filters.resourceTypes.map((r: string) => ({
+              property: 'Resource Type',
+              multi_select: { contains: r },
+            })),
+          } as any);
         }
       }
+
+      const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID, notionFilter);
+      let results = allEntries;
 
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -92,7 +108,7 @@ Deno.serve(async (req) => {
       const mapped = results.map((page: any) => ({
         id: page.id,
         name: getTitle(page.properties.Name),
-        resourceType: page.properties['Resource Type']?.multi_select?.map((s: any) => s.name).join(', ') || '',
+        resourceTypes: page.properties['Resource Type']?.multi_select?.map((s: any) => s.name) || [],
         link: page.properties.Link?.url || getRichText(page.properties.Link) || '',
         description: getRichText(page.properties.Description),
         demographics: page.properties.Demographics?.multi_select?.map((s: any) => s.name) || [],
@@ -117,18 +133,13 @@ Deno.serve(async (req) => {
   }
 });
 
-async function fetchAllEntries(apiKey: string, dbId: string) {
+async function fetchAllEntries(apiKey: string, dbId: string, filter: any) {
   const allResults: any[] = [];
   let startCursor: string | undefined;
 
   do {
     const body: any = {
-      filter: {
-        and: [
-          { property: 'Capture', checkbox: { equals: true } },
-          { property: 'To Be Confirmed', checkbox: { equals: false } },
-        ],
-      },
+      filter,
       page_size: 100,
     };
     if (startCursor) body.start_cursor = startCursor;

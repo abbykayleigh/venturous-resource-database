@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface Resource {
   id: string;
   name: string;
-  resourceType: string;
+  resourceTypes: string[];
   link: string;
   description: string;
   demographics: string[];

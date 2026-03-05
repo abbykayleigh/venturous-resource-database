@@ -6,16 +6,9 @@ interface ResourceGridProps {
 }
 
 const sizePattern: Array<"normal" | "wide" | "tall" | "large"> = [
-  "wide",
-  "normal",
-  "normal",
-  "tall",
-  "normal",
-  "normal",
-  "wide",
-  "normal",
-  "normal",
-  "normal",
+  "wide", "normal", "normal", "tall",
+  "normal", "normal", "wide", "normal",
+  "normal", "normal",
 ];
 
 export function ResourceGrid({ resources }: ResourceGridProps) {
@@ -35,11 +28,17 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
       {resources.map((resource, i) => (
-        <ResourceCard
+        <div
           key={resource.id}
-          resource={resource}
-          size={sizePattern[i % sizePattern.length]}
-        />
+          className="animate-fade-in"
+          style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}
+        >
+          <ResourceCard
+            resource={resource}
+            size={sizePattern[i % sizePattern.length]}
+            index={i}
+          />
+        </div>
       ))}
     </div>
   );
