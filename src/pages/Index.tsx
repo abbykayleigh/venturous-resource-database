@@ -11,14 +11,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type AppMode = "landing" | "quiz" | "results" | "search";
 
-const LoadingCards = () => (
-  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
-    {Array.from({ length: 8 }).map((_, i) => (
-      <div
-        key={i}
-        className="border rounded-2xl overflow-hidden bg-card animate-pulse"
-        style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}
-      >
+const LoadingCards = () =>
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
+    {Array.from({ length: 8 }).map((_, i) =>
+  <div
+    key={i}
+    className="border rounded-2xl overflow-hidden bg-card animate-pulse"
+    style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
+    
         <div className="w-full h-40 md:h-48" style={{ backgroundColor: '#a6afc5' }} />
         <div className="p-5 space-y-3">
           <Skeleton className="h-5 w-3/4" />
@@ -27,9 +27,9 @@ const LoadingCards = () => (
           <Skeleton className="h-4 w-2/3" />
         </div>
       </div>
-    ))}
-  </div>
-);
+  )}
+  </div>;
+
 
 const Index = () => {
   const [mode, setMode] = useState<AppMode>("landing");
@@ -39,12 +39,12 @@ const Index = () => {
 
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
-    queryFn: getFilterOptions,
+    queryFn: getFilterOptions
   });
 
   const mergedFilters = {
     ...quizFilters,
-    ...activeResultFilters,
+    ...activeResultFilters
   };
 
   const { data: resources, isLoading: resourcesLoading } = useQuery({
@@ -53,7 +53,7 @@ const Index = () => {
       Object.keys(mergedFilters).length > 0 ? mergedFilters : undefined,
       searchQuery || undefined
     ),
-    enabled: mode === "results" || mode === "search",
+    enabled: mode === "results" || mode === "search"
   });
 
   const handleQuizComplete = (filters: QuizFilters) => {
@@ -108,15 +108,15 @@ const Index = () => {
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
-                  className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]"
-                >
+                  className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
+                  
                   {filtersLoading ? "Loading..." : "Get Matched with Resources"}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => setMode("search")}
-                  className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]"
-                >
+                  className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
+                  
                   <Search className="w-4 h-4" />
                   Search Resources
                 </button>
@@ -132,8 +132,8 @@ const Index = () => {
                     href="https://www.venturouscounselling.com/about/find-a-therapist/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]"
-                  >
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
+                    
                     Connect with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -141,8 +141,8 @@ const Index = () => {
                     href="https://form.questionscout.com/662832229f4173275fe73547"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]"
-                  >
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
+                    
                     Get Matched with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
@@ -154,11 +154,11 @@ const Index = () => {
                   <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
                     Finding the right counsellor isn't a small thing. It's the thing.
                   </p>
+                  
+
+                  
                   <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
-                    Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
-                  </p>
-                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
-                    Our team works with youth, adults, and relationships across Vancouver and Port Moody.
+
                   </p>
                   <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
                     Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
@@ -180,8 +180,8 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   // Quiz
@@ -189,8 +189,8 @@ const Index = () => {
     return (
       <div className="grain-overlay" style={{ backgroundColor: '#FAFAF1' }}>
         <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} />
-      </div>
-    );
+      </div>);
+
   }
 
   // Search mode
@@ -202,9 +202,9 @@ const Index = () => {
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
           </a>
           <button
-            onClick={() => { setMode("quiz"); setSearchQuery(""); }}
-            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
-          >
+            onClick={() => {setMode("quiz");setSearchQuery("");}}
+            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+            
             Take Quiz
           </button>
         </header>
@@ -213,13 +213,13 @@ const Index = () => {
           <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
         </div>
 
-        {filterOptions && (
-          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
-        )}
+        {filterOptions &&
+        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+        }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>
-    );
+      </div>);
+
   }
 
   // Results mode
@@ -232,15 +232,15 @@ const Index = () => {
           </a>
           <div className="flex gap-3">
             <button
-              onClick={() => { setMode("search"); setQuizFilters({}); }}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
-            >
+              onClick={() => {setMode("search");setQuizFilters({});}}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              
               Search
             </button>
             <button
-              onClick={() => { setMode("quiz"); setQuizFilters({}); }}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
-            >
+              onClick={() => {setMode("quiz");setQuizFilters({});}}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              
               Get Rematched
             </button>
           </div>
@@ -251,24 +251,24 @@ const Index = () => {
             Your Results
           </h2>
           <p className="font-body text-muted-foreground">
-            {resourcesLoading ? (
-              <span className="inline-flex items-center gap-2">
+            {resourcesLoading ?
+            <span className="inline-flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Finding your matches...
-              </span>
-            ) : (
-              `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
-            )}
+              </span> :
+
+            `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
+            }
           </p>
         </div>
 
-        {filterOptions && (
-          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
-        )}
+        {filterOptions &&
+        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+        }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>
-    );
+      </div>);
+
   }
 
   return null;
