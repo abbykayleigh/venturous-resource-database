@@ -5,10 +5,27 @@ import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, Loader2 } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type AppMode = "landing" | "quiz" | "results" | "search";
+
+const LoadingCards = () => (
+  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <div key={i} className="border rounded-2xl overflow-hidden bg-card" style={{ borderColor: '#3f3c18' }}>
+        <Skeleton className="w-full h-40 md:h-48 rounded-none" style={{ backgroundColor: '#a6afc5' }} />
+        <div className="p-5 space-y-3">
+          <Skeleton className="h-5 w-3/4" />
+          <Skeleton className="h-4 w-1/3" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
 
 const Index = () => {
   const [mode, setMode] = useState<AppMode>("landing");
@@ -60,9 +77,9 @@ const Index = () => {
   if (mode === "landing") {
     return (
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
-        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 pt-12 pb-10">
-          <div className="max-w-6xl w-full border border-border rounded-2xl p-8 md:p-10 lg:p-14" style={{ backgroundColor: '#FAFAF1' }}>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
+          <div className="max-w-6xl w-full border border-border rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14" style={{ backgroundColor: '#FAFAF1' }}>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
               Get support with
               <br />
               difficult emotions + situations
@@ -72,8 +89,15 @@ const Index = () => {
               With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
             </p>
 
-            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start mb-8">
-              <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
+            {/* 860 Resources section - text left, buttons right on desktop; stacked on mobile */}
+            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8">
+              <div className="flex-1 text-left">
+                <span className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
+                <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
+                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
@@ -90,17 +114,25 @@ const Index = () => {
                   Search Resources
                 </button>
               </div>
-              <div className="flex-1 text-left order-1 md:order-2">
-                <span className="font-display text-xl md:text-2xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
-                <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
-                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
-                </p>
-              </div>
             </div>
 
+            {/* Personalized Support section */}
             <div className="border-t border-border pt-6 mb-5">
-              <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
-                <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
+              <div className="text-left">
+                <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                  Finding the right counsellor isn't a small thing. It's the thing.
+                </p>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                  Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
+                </p>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                  Our team works with youth, adults, and relationships across Vancouver and Port Moody.
+                </p>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
+                  Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 mt-5">
                   <a
                     href="https://www.venturouscounselling.com/about/find-a-therapist/"
                     target="_blank"
@@ -119,21 +151,6 @@ const Index = () => {
                     Get Matched with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
-                </div>
-                <div className="flex-1 text-left order-1 md:order-2">
-                  <h3 className="font-display text-lg md:text-xl font-medium tracking-[-0.06em] leading-[0.82] mb-2">Want personalized support?</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                    Finding the right counsellor isn't a small thing. It's the thing.
-                  </p>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                    Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
-                  </p>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                    Our team works with youth, adults, and relationships across Vancouver and Port Moody.
-                  </p>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                    Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
-                  </p>
                 </div>
               </div>
             </div>
@@ -168,13 +185,14 @@ const Index = () => {
   if (mode === "search") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
-        <header className="px-6 md:px-16 lg:px-24 pt-12 pb-8 flex items-center justify-between">
-          <button
-            onClick={handleReset}
-            className="font-display text-2xl md:text-3xl font-medium tracking-[-0.05em] hover:text-primary transition-colors"
+        <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-8 flex items-center justify-between">
+          <a
+            href="https://www.venturouscounselling.com/our-team/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Support Link
-          </button>
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
+          </a>
           <button
             onClick={() => {
               setMode("quiz");
@@ -186,7 +204,7 @@ const Index = () => {
           </button>
         </header>
 
-        <div className="px-6 md:px-16 lg:px-24 pb-8 max-w-2xl mx-auto">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 max-w-2xl mx-auto">
           <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
         </div>
 
@@ -199,9 +217,7 @@ const Index = () => {
         )}
 
         {resourcesLoading ? (
-          <div className="flex justify-center py-24">
-            <p className="font-body text-muted-foreground animate-pulse">Loading resources...</p>
-          </div>
+          <LoadingCards />
         ) : (
           <ResourceGrid resources={resources || []} />
         )}
@@ -213,13 +229,14 @@ const Index = () => {
   if (mode === "results") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
-        <header className="px-6 md:px-16 lg:px-24 pt-12 pb-4 flex items-center justify-between">
-          <button
-            onClick={handleReset}
-            className="font-display text-2xl md:text-3xl font-medium tracking-[-0.05em] hover:text-primary transition-colors"
+        <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-4 flex items-center justify-between">
+          <a
+            href="https://www.venturouscounselling.com/our-team/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Support Link
-          </button>
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
+          </a>
           <div className="flex gap-3">
             <button
               onClick={() => {
@@ -237,17 +254,24 @@ const Index = () => {
               }}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
             >
-              Retake Quiz
+              Get Rematched
             </button>
           </div>
         </header>
 
-        <div className="px-6 md:px-16 lg:px-24 pb-8 text-center">
-          <h2 className="font-display text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
           <p className="font-body text-muted-foreground">
-            {resources?.length || 0} resource{(resources?.length || 0) !== 1 ? "s" : ""} matched your selections
+            {resourcesLoading ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Finding your matches...
+              </span>
+            ) : (
+              `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
+            )}
           </p>
         </div>
 
@@ -260,9 +284,7 @@ const Index = () => {
         )}
 
         {resourcesLoading ? (
-          <div className="flex justify-center py-24">
-            <p className="font-body text-muted-foreground animate-pulse">Loading resources...</p>
-          </div>
+          <LoadingCards />
         ) : (
           <ResourceGrid resources={resources || []} />
         )}

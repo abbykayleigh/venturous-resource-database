@@ -21,7 +21,6 @@ Deno.serve(async (req) => {
     const { action, filters, searchQuery } = await req.json();
 
     if (action === 'get-filter-options') {
-      // Fetch all valid entries to extract unique filter values
       const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID);
       const demographics = new Set<string>();
       const categoryTags = new Set<string>();
@@ -39,8 +38,11 @@ Deno.serve(async (req) => {
             categoryTags.add(item.name);
           }
         }
-        if (props['Resource Type']?.select?.name) {
-          resourceTypes.add(props['Resource Type'].select.name);
+        // Resource Type is multi_select
+        if (props['Resource Type']?.multi_select) {
+          for (const item of props['Resource Type'].multi_select) {
+            resourceTypes.add(item.name);
+          }
         }
       }
 
@@ -57,7 +59,6 @@ Deno.serve(async (req) => {
       const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID);
       let results = allEntries;
 
-      // Apply quiz filters (AND across questions, OR within)
       if (filters) {
         if (filters.demographics?.length > 0) {
           results = results.filter((page: any) => {
@@ -73,13 +74,12 @@ Deno.serve(async (req) => {
         }
         if (filters.resourceTypes?.length > 0) {
           results = results.filter((page: any) => {
-            const val = page.properties['Resource Type']?.select?.name || '';
-            return filters.resourceTypes.includes(val);
+            const vals = page.properties['Resource Type']?.multi_select?.map((s: any) => s.name) || [];
+            return filters.resourceTypes.some((r: string) => vals.includes(r));
           });
         }
       }
 
-      // Apply search
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         results = results.filter((page: any) => {
@@ -92,8 +92,8 @@ Deno.serve(async (req) => {
       const mapped = results.map((page: any) => ({
         id: page.id,
         name: getTitle(page.properties.Name),
-        resourceType: page.properties['Resource Type']?.select?.name || '',
-        link: page.properties.Link?.url || '',
+        resourceType: page.properties['Resource Type']?.multi_select?.map((s: any) => s.name).join(', ') || '',
+        link: page.properties.Link?.url || getRichText(page.properties.Link) || '',
         description: getRichText(page.properties.Description),
         demographics: page.properties.Demographics?.multi_select?.map((s: any) => s.name) || [],
         categoryTags: page.properties['Category Tags']?.multi_select?.map((s: any) => s.name) || [],

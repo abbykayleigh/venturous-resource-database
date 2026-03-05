@@ -24,7 +24,8 @@ export function ResourceCard({ resource, size = "normal" }: ResourceCardProps) {
       href={resource.link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group border border-border bg-card shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150 flex flex-col overflow-hidden ${sizeClasses[size]}`}
+      className={`group border bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150 flex flex-col overflow-hidden rounded-2xl ${sizeClasses[size]}`}
+      style={{ borderColor: '#3f3c18', boxShadow: '4px 4px 0px #3f3c18' }}
       onClick={(e) => {
         if (expanded) {
           e.preventDefault();
@@ -32,7 +33,7 @@ export function ResourceCard({ resource, size = "normal" }: ResourceCardProps) {
       }}
     >
       {imageUrl && (
-        <div className="w-full h-40 md:h-48 overflow-hidden border-b border-border">
+        <div className="w-full h-40 md:h-48 overflow-hidden border-b" style={{ borderColor: '#3f3c18' }}>
           <img
             src={imageUrl}
             alt={resource.name}
@@ -44,9 +45,9 @@ export function ResourceCard({ resource, size = "normal" }: ResourceCardProps) {
       )}
 
       {!imageUrl && (
-        <div className="w-full h-32 bg-secondary border-b border-border flex items-center justify-center">
-          <span className="font-display text-4xl text-muted-foreground opacity-30">
-            {resource.name.charAt(0)}
+        <div className="w-full h-40 md:h-48 border-b flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderColor: '#3f3c18' }}>
+          <span className="font-body text-sm font-semibold text-white uppercase tracking-wider text-center px-4">
+            {resource.resourceType || resource.name.charAt(0)}
           </span>
         </div>
       )}
@@ -59,7 +60,7 @@ export function ResourceCard({ resource, size = "normal" }: ResourceCardProps) {
         </div>
 
         {resource.resourceType && (
-          <span className="inline-block self-start border border-border bg-accent text-accent-foreground px-2 py-0.5 text-xs font-body font-semibold uppercase tracking-wider mb-3">
+          <span className="inline-block self-start border px-2 py-0.5 text-xs font-body font-semibold uppercase tracking-wider mb-3 rounded-full bg-accent text-accent-foreground" style={{ borderColor: '#3f3c18' }}>
             {resource.resourceType}
           </span>
         )}
