@@ -14,8 +14,12 @@ type AppMode = "landing" | "quiz" | "results" | "search";
 const LoadingCards = () => (
   <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
     {Array.from({ length: 8 }).map((_, i) => (
-      <div key={i} className="border rounded-2xl overflow-hidden bg-card" style={{ borderColor: '#3f3c18' }}>
-        <Skeleton className="w-full h-40 md:h-48 rounded-none" style={{ backgroundColor: '#a6afc5' }} />
+      <div
+        key={i}
+        className="border rounded-2xl overflow-hidden bg-card animate-pulse"
+        style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}
+      >
+        <div className="w-full h-40 md:h-48" style={{ backgroundColor: '#a6afc5' }} />
         <div className="p-5 space-y-3">
           <Skeleton className="h-5 w-3/4" />
           <Skeleton className="h-4 w-1/3" />
@@ -79,18 +83,21 @@ const Index = () => {
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
         <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
           <div className="max-w-6xl w-full border border-border rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14" style={{ backgroundColor: '#FAFAF1' }}>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
-              Get support with
-              <br />
-              difficult emotions + situations
-            </h1>
+            {/* Hero heading */}
+            <div className="animate-fade-in">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
+                Get support with
+                <br />
+                difficult emotions + situations
+              </h1>
 
-            <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed text-left">
-              With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
-            </p>
+              <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed text-left" style={{ animationDelay: '100ms', animationFillMode: 'both' }}>
+                With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
+              </p>
+            </div>
 
-            {/* 860 Resources section - text left, buttons right on desktop; stacked on mobile */}
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8">
+            {/* 860 Resources section - text left, buttons right */}
+            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8 animate-fade-in" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
               <div className="flex-1 text-left">
                 <span className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
                 <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
@@ -101,14 +108,14 @@ const Index = () => {
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
-                  className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center"
+                  className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]"
                 >
                   {filtersLoading ? "Loading..." : "Get Matched with Resources"}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => setMode("search")}
-                  className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center"
+                  className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]"
                 >
                   <Search className="w-4 h-4" />
                   Search Resources
@@ -116,28 +123,16 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Personalized Support section */}
-            <div className="border-t border-border pt-6 mb-5">
-              <div className="text-left">
-                <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                  Finding the right counsellor isn't a small thing. It's the thing.
-                </p>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                  Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
-                </p>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                  Our team works with youth, adults, and relationships across Vancouver and Port Moody.
-                </p>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed mt-3">
-                  Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 mt-5">
+            {/* Personalized Support section - buttons left, text right */}
+            <div className="border-t border-border pt-6 mb-5 animate-fade-in" style={{ animationDelay: '250ms', animationFillMode: 'both' }}>
+              <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
+                {/* Buttons stacked vertically on the left */}
+                <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
                   <a
                     href="https://www.venturouscounselling.com/about/find-a-therapist/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center"
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]"
                   >
                     Connect with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -146,11 +141,28 @@ const Index = () => {
                     href="https://form.questionscout.com/662832229f4173275fe73547"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center"
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]"
                   >
                     Get Matched with a Counsellor
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
+                </div>
+
+                {/* Text on the right */}
+                <div className="flex-1 text-left order-1 md:order-2">
+                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
+                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
+                    Finding the right counsellor isn't a small thing. It's the thing.
+                  </p>
+                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
+                    Whether you're a young person navigating something heavy, an adult working through what words haven't caught yet, or in a relationship where you're trying to find each other again, we want you to land somewhere that actually fits.
+                  </p>
+                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
+                    Our team works with youth, adults, and relationships across Vancouver and Port Moody.
+                  </p>
+                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
+                    Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+                  </p>
                 </div>
               </div>
             </div>
@@ -186,19 +198,12 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-8 flex items-center justify-between">
-          <a
-            href="https://www.venturouscounselling.com/our-team/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://www.venturouscounselling.com/our-team/" target="_blank" rel="noopener noreferrer">
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
           </a>
           <button
-            onClick={() => {
-              setMode("quiz");
-              setSearchQuery("");
-            }}
-            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
+            onClick={() => { setMode("quiz"); setSearchQuery(""); }}
+            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
           >
             Take Quiz
           </button>
@@ -209,18 +214,10 @@ const Index = () => {
         </div>
 
         {filterOptions && (
-          <ResultsFilters
-            filterOptions={filterOptions}
-            activeFilters={activeResultFilters}
-            onFiltersChange={setActiveResultFilters}
-          />
+          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         )}
 
-        {resourcesLoading ? (
-          <LoadingCards />
-        ) : (
-          <ResourceGrid resources={resources || []} />
-        )}
+        {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>
     );
   }
@@ -230,36 +227,26 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-4 flex items-center justify-between">
-          <a
-            href="https://www.venturouscounselling.com/our-team/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://www.venturouscounselling.com/our-team/" target="_blank" rel="noopener noreferrer">
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
           </a>
           <div className="flex gap-3">
             <button
-              onClick={() => {
-                setMode("search");
-                setQuizFilters({});
-              }}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
+              onClick={() => { setMode("search"); setQuizFilters({}); }}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
             >
               Search
             </button>
             <button
-              onClick={() => {
-                setMode("quiz");
-                setQuizFilters({});
-              }}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full"
+              onClick={() => { setMode("quiz"); setQuizFilters({}); }}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
             >
               Get Rematched
             </button>
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 text-center">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 text-center animate-fade-in">
           <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
@@ -276,18 +263,10 @@ const Index = () => {
         </div>
 
         {filterOptions && (
-          <ResultsFilters
-            filterOptions={filterOptions}
-            activeFilters={activeResultFilters}
-            onFiltersChange={setActiveResultFilters}
-          />
+          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         )}
 
-        {resourcesLoading ? (
-          <LoadingCards />
-        ) : (
-          <ResourceGrid resources={resources || []} />
-        )}
+        {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>
     );
   }
