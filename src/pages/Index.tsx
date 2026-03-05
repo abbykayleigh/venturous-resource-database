@@ -151,8 +151,8 @@ const Index = () => {
                 {/* Text on the right */}
                 <div className="flex-1 text-left order-1 md:order-2">
                   <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
-                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
-                    Finding the right counsellor isn't a small thing. It's the thing.
+                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed">Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+
                   </p>
                   
 
@@ -161,7 +161,7 @@ const Index = () => {
 
                   </p>
                   <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
-                    Not sure where to start? Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+
                   </p>
                 </div>
               </div>
