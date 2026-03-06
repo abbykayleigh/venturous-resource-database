@@ -95,11 +95,14 @@ export function QuizQuestion({
                   className={cn(
                     "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl active:scale-[0.97]",
                     questionNumber === 2 ? "animate-fade-in" : "",
-                    isSelected
-                      ? "bg-primary text-primary-foreground scale-[1.03]"
+                  isSelected
+                      ? "scale-[1.03] text-white"
                       : "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
                   )}
-                  style={staggerStyle}
+                  style={{
+                    ...staggerStyle,
+                    ...(isSelected ? { backgroundColor: '#bc4322', borderColor: '#bc4322' } : {}),
+                  }}
                 >
                   {displayLabel}
                 </button>
