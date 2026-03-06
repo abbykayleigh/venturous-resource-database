@@ -133,16 +133,16 @@ const Index = () => {
                   lineHeight: '0.82',
                   letterSpacing: '-0.07em',
                   marginBottom: '1.5rem'
-                }}>
-                
-                Venturous
+                }}>Venturous
+Resource Library
+
                 <br />
                 Resource
                 <br />
                 Library
               </h1>
               <p
-                className="font-body leading-relaxed max-w-xl text-xl font-semibold"
+                className="font-body leading-relaxed max-w-xl text-xl font-semibold text-secondary"
                 style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
                 
                 Curated resources to support you outside of session.
