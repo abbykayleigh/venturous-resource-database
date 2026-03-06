@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
+import { ArrowLeft } from "lucide-react";
 
-// Display-only label overrides
 const DISPLAY_LABELS: Record<string, string> = {
   "Adults": "Adult",
   "Older Adults": "Older Adult",
@@ -37,19 +37,25 @@ export function QuizQuestion({
   multiSelect = false,
 }: QuizQuestionProps) {
   const allSelected = options.length > 0 && selected.length === options.length;
-  const progressValue = ((questionNumber - 1) / totalQuestions) * 100;
+  const progressValue = (questionNumber / totalQuestions) * 100;
 
   return (
-    <div className="min-h-screen flex flex-col justify-center px-6 py-16 md:px-16 lg:px-24 text-center animate-fade-in">
+    <div className="min-h-screen flex flex-col justify-center px-6 py-16 md:px-16 lg:px-24 text-center">
       <div className="max-w-5xl mx-auto w-full">
-        {/* Progress bar */}
-        <div className="mb-6 max-w-md mx-auto">
-          <Progress value={progressValue} className="h-2 bg-muted" />
+        {/* Progress bar with step label and back */}
+        <div className="mb-6 max-w-md mx-auto flex items-center gap-3">
+          {onBack && (
+            <button onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors active:scale-[0.97]">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+          <div className="flex-1">
+            <Progress value={progressValue} className="h-2 bg-muted" />
+          </div>
+          <span className="font-body text-xs text-muted-foreground whitespace-nowrap">
+            Step {questionNumber} of {totalQuestions}
+          </span>
         </div>
-
-        <p className="font-body text-sm uppercase tracking-widest text-muted-foreground mb-4">
-          {questionNumber} / {totalQuestions}
-        </p>
 
         <div className="border border-border rounded-2xl p-8 md:p-12 mb-8" style={{ backgroundColor: '#FAFAF1' }}>
           <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-medium tracking-[-0.06em] mb-3 leading-[0.88]">
@@ -78,7 +84,6 @@ export function QuizQuestion({
             {options.map((option, i) => {
               const isSelected = selected.includes(option);
               const displayLabel = DISPLAY_LABELS[option] || option;
-              // Stagger animation for question 2 (questionNumber === 2)
               const staggerStyle = questionNumber === 2
                 ? { animationDelay: `${i * 60}ms`, animationFillMode: 'both' as const }
                 : {};
@@ -104,14 +109,6 @@ export function QuizQuestion({
         </div>
 
         <div className="flex gap-4 justify-center">
-          {onBack && (
-            <button
-              onClick={onBack}
-              className="border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
-            >
-              Back
-            </button>
-          )}
           <button
             onClick={onNext}
             className="border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"

@@ -1,9 +1,12 @@
+import { useState } from "react";
 import type { Resource } from "@/lib/notion";
 import { ResourceCard } from "./ResourceCard";
 
 interface ResourceGridProps {
   resources: Resource[];
 }
+
+const RESULTS_PER_PAGE = 24;
 
 const sizePattern: Array<"normal" | "wide" | "tall" | "large"> = [
   "wide", "normal", "normal", "tall",
@@ -12,6 +15,8 @@ const sizePattern: Array<"normal" | "wide" | "tall" | "large"> = [
 ];
 
 export function ResourceGrid({ resources }: ResourceGridProps) {
+  const [visibleCount, setVisibleCount] = useState(RESULTS_PER_PAGE);
+
   if (resources.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 px-6">
@@ -25,21 +30,36 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
     );
   }
 
+  const visible = resources.slice(0, visibleCount);
+  const hasMore = visibleCount < resources.length;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
-      {resources.map((resource, i) => (
-        <div
-          key={resource.id}
-          className="animate-fade-in"
-          style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}
-        >
-          <ResourceCard
-            resource={resource}
-            size={sizePattern[i % sizePattern.length]}
-            index={i}
-          />
+    <div className="px-6 md:px-16 lg:px-24 py-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {visible.map((resource, i) => (
+          <div
+            key={resource.id}
+            className="animate-fade-in"
+            style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}
+          >
+            <ResourceCard
+              resource={resource}
+              size={sizePattern[i % sizePattern.length]}
+              index={i}
+            />
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => setVisibleCount(v => v + RESULTS_PER_PAGE)}
+            className="border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full active:scale-[0.97]"
+          >
+            Load More ({resources.length - visibleCount} remaining)
+          </button>
         </div>
-      ))}
+      )}
     </div>
   );
 }
