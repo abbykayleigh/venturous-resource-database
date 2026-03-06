@@ -133,8 +133,8 @@ const Index = () => {
                   lineHeight: '0.82',
                   letterSpacing: '-0.07em',
                   marginBottom: '1.5rem'
-                }}>Venturous
-Resource Library
+                }}>Venturous Resource Library
+
 
                 <br />
                 Resource
