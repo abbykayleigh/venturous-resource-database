@@ -107,7 +107,7 @@ const Index = () => {
     setSearchQuery("");
   };
 
-  // Landing — full black
+  // Landing
   if (mode === "landing") {
     return (
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#111110' }}>
@@ -118,7 +118,9 @@ const Index = () => {
           >
             {/* Logo */}
             <div className="mb-10 animate-fade-in">
-              <img src={venturousLogoLight} alt="Venturous Counselling + Consulting" className="h-8 md:h-10 w-auto" />
+              <a href="https://www.venturouscounselling.com" target="_blank" rel="noopener noreferrer">
+                <img src={venturousLogoLight} alt="Venturous Counselling + Consulting" className="h-8 md:h-10 w-auto" />
+              </a>
             </div>
 
             {/* Hero heading */}
@@ -133,17 +135,17 @@ const Index = () => {
                   marginBottom: '1.5rem',
                 }}
               >
-                Get support with
+                Venturous
                 <br />
-                difficult emotions
+                Resource
                 <br />
-                + situations
+                Library
               </h1>
               <p
                 className="font-body leading-relaxed max-w-xl"
                 style={{ color: '#a6afc5', fontSize: '0.875rem' }}
               >
-                With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
+                Curated resources to support you outside of session.
               </p>
             </div>
 
@@ -169,7 +171,10 @@ const Index = () => {
                   Over {resourceCount}+ resources + growing!
                 </span>
                 <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
-                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong style={{ color: '#eeefdf' }}>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
+                  Whether you're working through difficult emotions, supporting a loved one, or deepening your self-understanding, the <strong style={{ color: '#eeefdf' }}>Venturous Resource Library</strong> connects you with thoughtfully curated resources we trust, selected by Registered Clinical Counsellors.
+                </p>
+                <p className="font-body leading-relaxed mt-3" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                  And if you're looking for more personalized support, our team is here when you're ready.
                 </p>
               </div>
               <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
@@ -182,7 +187,7 @@ const Index = () => {
                     backgroundColor: '#eeefdf',
                     color: '#111110',
                     padding: '14px 36px',
-                    fontSize: '1rem',
+                    fontSize: '0.875rem',
                     boxShadow: '4px 4px 0px #a6afc5',
                   }}
                 >
@@ -198,7 +203,7 @@ const Index = () => {
                     backgroundColor: 'transparent',
                     color: '#eeefdf',
                     padding: '14px 36px',
-                    fontSize: '1rem',
+                    fontSize: '0.875rem',
                     boxShadow: '4px 4px 0px rgba(238,239,223,0.2)',
                   }}
                 >
@@ -228,7 +233,7 @@ const Index = () => {
                       backgroundColor: '#55558d',
                       color: '#eeefdf',
                       padding: '12px 28px',
-                      fontSize: '1rem',
+                      fontSize: '0.875rem',
                       boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
                     }}
                   >
@@ -245,7 +250,7 @@ const Index = () => {
                       backgroundColor: 'transparent',
                       color: '#eeefdf',
                       padding: '12px 28px',
-                      fontSize: '1rem',
+                      fontSize: '0.875rem',
                       boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
                     }}
                   >
@@ -264,10 +269,16 @@ const Index = () => {
                       lineHeight: '0.9',
                     }}
                   >
-                    Want personalized support?
+                    Looking for personalized support?
                   </h3>
                   <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
-                    Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+                    Finding the right counsellor isn't a small thing. It's the thing.
+                  </p>
+                  <p className="font-body leading-relaxed mt-3" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                    Take our 3-minute counsellor matching quiz and we'll suggest the counsellor who may be the best fit for what you're carrying. It's simply a way to explore what support might feel right.
+                  </p>
+                  <p className="font-body leading-relaxed mt-3" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                    You can also browse our team, read about each counsellor's approach, watch short video introductions for a vibe check, and trust your gut about who feels right.
                   </p>
                 </div>
               </div>
@@ -309,7 +320,7 @@ const Index = () => {
   if (mode === "quiz" && filterOptions) {
     return (
       <div className="grain-overlay" style={{ backgroundColor: '#FAFAF1' }}>
-        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onBack={handleReset} />
+        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onExit={handleReset} />
       </div>
     );
   }
@@ -328,11 +339,14 @@ const Index = () => {
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
               Back to Start
             </button>
-            <button
-              onClick={() => { setMode("quiz"); setSearchQuery(""); }}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-              Take Quiz
-            </button>
+            <a
+              href="https://www.venturouscounselling.com/about/find-a-therapist/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+              <MessageCircle className="w-4 h-4" />
+              Connect with a Counsellor
+            </a>
           </div>
         </header>
 

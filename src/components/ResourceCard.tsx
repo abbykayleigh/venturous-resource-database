@@ -110,7 +110,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
                   <span
                     key={tag}
                     className="inline-block text-xs font-body font-semibold uppercase tracking-wider rounded-full"
-                    style={{ backgroundColor: color.bg, color: color.text, padding: '4px 12px' }}
+                    style={{ backgroundColor: color.bg, color: color.text, padding: '5px 12px' }}
                   >
                     {tag}
                   </span>
@@ -136,7 +136,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
 
       {/* Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 rounded-2xl border" style={{ borderColor: '#3f3c18' }}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-0 rounded-2xl border bg-card" style={{ borderColor: '#3f3c18', boxShadow: '6px 6px 0px #3f3c18' }}>
           <DialogTitle className="sr-only">{resource.name}</DialogTitle>
           {imageUrl ? (
             <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover rounded-t-2xl" />
@@ -152,7 +152,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
                 {tags.map((tag, i) => {
                   const color = TAG_COLORS[i % TAG_COLORS.length];
                   return (
-                    <span key={tag} className="inline-block text-xs font-body font-semibold uppercase tracking-wider rounded-full" style={{ backgroundColor: color.bg, color: color.text, padding: '4px 12px' }}>
+                    <span key={tag} className="inline-block text-xs font-body font-semibold uppercase tracking-wider rounded-full" style={{ backgroundColor: color.bg, color: color.text, padding: '5px 12px' }}>
                       {tag}
                     </span>
                   );
