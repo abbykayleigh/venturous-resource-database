@@ -5,21 +5,20 @@ import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
-import { Search, Loader2, MessageCircle, Heart } from "lucide-react";
+import { Search, Loader2, Heart, MessageCircle } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
+import venturousLogoLight from "@/assets/venturous-logo-light.png";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type AppMode = "landing" | "quiz" | "results" | "search";
 
-const RESULTS_PER_PAGE = 24;
-
 const LoadingCards = () =>
-<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
+  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
     {Array.from({ length: 8 }).map((_, i) =>
-  <div
-    key={i}
-    className="border rounded-2xl overflow-hidden bg-card animate-pulse"
-    style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
+      <div
+        key={i}
+        className="border rounded-2xl overflow-hidden bg-card animate-pulse"
+        style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
         <div className="w-full h-40 md:h-48" style={{ backgroundColor: '#a6afc5' }} />
         <div className="p-5 space-y-3">
           <Skeleton className="h-5 w-3/4" />
@@ -28,36 +27,35 @@ const LoadingCards = () =>
           <Skeleton className="h-4 w-2/3" />
         </div>
       </div>
-  )}
+    )}
   </div>;
 
-function useCountUp(target: number, from: number, duration: number) {
-  const [count, setCount] = useState(from);
+function useCountUp(start: number, target: number, duration: number = 1200) {
+  const [count, setCount] = useState(start);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
+      (entries) => { if (entries[0].isIntersecting && !started) setStarted(true); },
       { threshold: 0.5 }
     );
-    observer.observe(ref.current);
+    if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [started]);
 
   useEffect(() => {
     if (!started) return;
-    const startTime = performance.now();
-    const animate = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(from + (target - from) * eased));
-      if (progress < 1) requestAnimationFrame(animate);
+    let startTime: number;
+    const range = target - start;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      setCount(Math.floor(start + progress * range));
+      if (progress < 1) requestAnimationFrame(step);
     };
-    requestAnimationFrame(animate);
-  }, [started, target, from, duration]);
+    requestAnimationFrame(step);
+  }, [started, target, start, duration]);
 
   return { count, ref };
 }
@@ -68,11 +66,12 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeResultFilters, setActiveResultFilters] = useState<QuizFilters>({});
 
+  const { count: resourceCount, ref: counterRef } = useCountUp(850, 860);
+
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
     queryFn: getFilterOptions,
     staleTime: 60 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
   });
 
   const mergedFilters = { ...quizFilters, ...activeResultFilters };
@@ -85,7 +84,6 @@ const Index = () => {
     ),
     enabled: mode === "results" || mode === "search",
     staleTime: 60 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
   });
 
   const handleQuizComplete = (filters: QuizFilters) => {
@@ -109,106 +107,211 @@ const Index = () => {
     setSearchQuery("");
   };
 
-  const { count: animatedCount, ref: counterRef } = useCountUp(860, 850, 1200);
-
-  // Landing
+  // Landing — full black
   if (mode === "landing") {
     return (
-      <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#eeefdf' }}>
+      <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#111110' }}>
         <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
-          <div className="max-w-6xl w-full border border-border rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14" style={{ backgroundColor: '#FAFAF1' }}>
+          <div
+            className="max-w-6xl w-full rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14"
+            style={{ backgroundColor: '#111110', border: '1px solid #eeefdf' }}
+          >
+            {/* Logo */}
+            <div className="mb-10 animate-fade-in">
+              <img src={venturousLogoLight} alt="Venturous Counselling + Consulting" className="h-8 md:h-10 w-auto" />
+            </div>
+
             {/* Hero heading */}
-            <div className="animate-fade-in">
-              <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-[90px] font-medium tracking-[-0.06em] leading-[0.78] mb-4 text-left">
+            <div className="animate-fade-in mb-10">
+              <h1
+                className="font-display font-medium text-left"
+                style={{
+                  color: '#eeefdf',
+                  fontSize: 'clamp(3.5rem, 10vw, 130px)',
+                  lineHeight: '0.82',
+                  letterSpacing: '-0.07em',
+                  marginBottom: '1.5rem',
+                }}
+              >
                 Get support with
                 <br />
-                difficult emotions + situations
+                difficult emotions
+                <br />
+                + situations
               </h1>
-
-              <p className="font-body text-base md:text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed text-left" style={{ animationDelay: '100ms', animationFillMode: 'both' }}>
+              <p
+                className="font-body leading-relaxed max-w-xl"
+                style={{ color: '#a6afc5', fontSize: '0.875rem' }}
+              >
                 With 24/7 access to the latest professional recommendations of Registered Clinical Counsellors.
               </p>
             </div>
 
-            {/* 860 Resources section - text left, buttons right */}
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8 animate-fade-in" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
+            {/* Divider */}
+            <div style={{ borderTop: '1px solid #eeefdf', opacity: 0.2 }} className="mb-8" />
+
+            {/* 860 Resources section */}
+            <div
+              className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8 animate-fade-in"
+              style={{ animationDelay: '150ms', animationFillMode: 'both' }}
+            >
               <div className="flex-1 text-left">
-                <span className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">
-                  Over <span ref={counterRef}>{animatedCount}</span> resources + growing!
+                <span
+                  ref={counterRef}
+                  className="font-display font-medium block mb-3"
+                  style={{
+                    color: '#eeefdf',
+                    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                    letterSpacing: '-0.05em',
+                    lineHeight: '0.9',
+                  }}
+                >
+                  Over {resourceCount}+ resources + growing!
                 </span>
-                <p className="font-body text-sm text-foreground leading-relaxed">
-                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
+                <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                  Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong style={{ color: '#eeefdf' }}>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
                 </p>
               </div>
               <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
-                  className="group border border-border px-10 py-4 font-body text-sm font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
-                  {filtersLoading ? "Loading..." : "Get Matched with Resources"}
+                  className="font-body font-semibold rounded-full flex items-center gap-2 justify-center active:scale-[0.97] transition-all disabled:opacity-50"
+                  style={{
+                    border: '1px solid #eeefdf',
+                    backgroundColor: '#eeefdf',
+                    color: '#111110',
+                    padding: '14px 36px',
+                    fontSize: '1rem',
+                    boxShadow: '4px 4px 0px #a6afc5',
+                  }}
+                >
+                  {filtersLoading
+                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</>
+                    : "Get Matched with Resources"}
                 </button>
                 <button
                   onClick={() => setMode("search")}
-                  className="border border-border px-10 py-4 font-body text-sm font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
+                  className="font-body font-semibold rounded-full flex items-center gap-2 justify-center active:scale-[0.97] transition-all"
+                  style={{
+                    border: '1px solid #eeefdf',
+                    backgroundColor: 'transparent',
+                    color: '#eeefdf',
+                    padding: '14px 36px',
+                    fontSize: '1rem',
+                    boxShadow: '4px 4px 0px rgba(238,239,223,0.2)',
+                  }}
+                >
                   <Search className="w-4 h-4" />
                   Search Resources
                 </button>
               </div>
             </div>
 
-            {/* Personalized Support section - buttons left, text right */}
-            <div className="border-t border-border pt-6 mb-5 animate-fade-in" style={{ animationDelay: '250ms', animationFillMode: 'both' }}>
+            {/* Divider */}
+            <div style={{ borderTop: '1px solid #eeefdf', opacity: 0.2 }} className="mb-6" />
+
+            {/* Personalized Support section */}
+            <div
+              className="animate-fade-in"
+              style={{ animationDelay: '250ms', animationFillMode: 'both' }}
+            >
               <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
-                {/* Buttons stacked vertically on the left */}
                 <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
                   <a
                     href="https://www.venturouscounselling.com/about/find-a-therapist/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-4 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
-                    <MessageCircle className="w-4 h-4" />
+                    className="inline-flex items-center gap-2 font-body font-semibold rounded-full justify-center active:scale-[0.97] transition-all"
+                    style={{
+                      border: '1px solid #55558d',
+                      backgroundColor: '#55558d',
+                      color: '#eeefdf',
+                      padding: '12px 28px',
+                      fontSize: '1rem',
+                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
+                    }}
+                  >
+                    <MessageCircle className="w-4 h-4 shrink-0" />
                     Connect with a Counsellor
                   </a>
                   <a
                     href="https://form.questionscout.com/662832229f4173275fe73547"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-4 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
-                    <Heart className="w-4 h-4" />
+                    className="inline-flex items-center gap-2 font-body font-semibold rounded-full justify-center active:scale-[0.97] transition-all"
+                    style={{
+                      border: '1px solid #eeefdf',
+                      backgroundColor: 'transparent',
+                      color: '#eeefdf',
+                      padding: '12px 28px',
+                      fontSize: '1rem',
+                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
+                    }}
+                  >
+                    <Heart className="w-4 h-4 shrink-0" />
                     Get Matched with a Counsellor
                   </a>
                 </div>
 
-                {/* Text on the right */}
                 <div className="flex-1 text-left order-1 md:order-2">
-                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
-                  <p className="font-body text-sm text-foreground leading-relaxed">Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.</p>
+                  <h3
+                    className="font-display font-medium mb-3"
+                    style={{
+                      color: '#eeefdf',
+                      fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
+                      letterSpacing: '-0.05em',
+                      lineHeight: '0.9',
+                    }}
+                  >
+                    Want personalized support?
+                  </h3>
+                  <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                    Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-border pt-5 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
-              <p className="font-body text-xs text-muted-foreground leading-relaxed text-left flex-1">
-                Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please{" "}
-                <a href="https://venturous.janeapp.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">book a free consultation with one of our counsellors</a>.
-                {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
-                <a href="https://database.venturouscounselling.com/privacy_policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">privacy policy here</a>.
-              </p>
-              <a href="https://www.venturouscounselling.com" target="_blank" rel="noopener noreferrer" className="shrink-0">
-                <img src={venturousLogo} alt="Venturous Counselling + Consulting" className="h-8 md:h-10 w-auto" />
-              </a>
-            </div>
+            {/* Divider */}
+            <div style={{ borderTop: '1px solid #eeefdf', opacity: 0.2 }} className="mt-8 mb-5" />
+
+            {/* Disclaimer */}
+            <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.7rem' }}>
+              Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#eeefdf' }}
+                className="underline hover:opacity-80 transition-opacity"
+                href="https://venturous.janeapp.com/"
+              >
+                book a free consultation with one of our counsellors
+              </a>.
+              {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
+              <a
+                href="https://database.venturouscounselling.com/privacy_policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#eeefdf' }}
+                className="underline hover:opacity-80 transition-opacity"
+              >
+                privacy policy here
+              </a>.
+            </p>
           </div>
         </div>
-      </div>);
+      </div>
+    );
   }
 
   // Quiz
   if (mode === "quiz" && filterOptions) {
     return (
       <div className="grain-overlay" style={{ backgroundColor: '#FAFAF1' }}>
-        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onExit={handleReset} />
-      </div>);
+        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onBack={handleReset} />
+      </div>
+    );
   }
 
   // Search mode
@@ -216,9 +319,9 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-8 flex items-center justify-between">
-          <a href="https://www.venturouscounselling.com/our-team/" target="_blank" rel="noopener noreferrer">
+          <button onClick={handleReset}>
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
-          </a>
+          </button>
           <div className="flex gap-3">
             <button
               onClick={handleReset}
@@ -226,7 +329,7 @@ const Index = () => {
               Back to Start
             </button>
             <button
-              onClick={() => {setMode("quiz");setSearchQuery("");}}
+              onClick={() => { setMode("quiz"); setSearchQuery(""); }}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
               Take Quiz
             </button>
@@ -238,11 +341,12 @@ const Index = () => {
         </div>
 
         {filterOptions &&
-        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>);
+      </div>
+    );
   }
 
   // Results mode
@@ -250,12 +354,12 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-4 flex items-center justify-between">
-          <a href="https://www.venturouscounselling.com/our-team/" target="_blank" rel="noopener noreferrer">
+          <button onClick={handleReset}>
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
-          </a>
+          </button>
           <div className="flex gap-3">
             <button
-              onClick={() => {setMode("search");setQuizFilters({});}}
+              onClick={() => { setMode("search"); setQuizFilters({}); }}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
               Search
             </button>
@@ -273,21 +377,22 @@ const Index = () => {
           </h2>
           <p className="font-body text-muted-foreground">
             {resourcesLoading ?
-            <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Finding your matches...
               </span> :
-            `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
+              `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
             }
           </p>
         </div>
 
         {filterOptions &&
-        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>);
+      </div>
+    );
   }
 
   return null;
