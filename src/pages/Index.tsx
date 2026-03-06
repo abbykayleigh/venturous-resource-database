@@ -13,12 +13,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 type AppMode = "landing" | "quiz" | "results" | "search";
 
 const LoadingCards = () =>
-  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
     {Array.from({ length: 8 }).map((_, i) =>
-      <div
-        key={i}
-        className="border rounded-2xl overflow-hidden bg-card animate-pulse"
-        style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
+  <div
+    key={i}
+    className="border rounded-2xl overflow-hidden bg-card animate-pulse"
+    style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
         <div className="w-full h-40 md:h-48" style={{ backgroundColor: '#a6afc5' }} />
         <div className="p-5 space-y-3">
           <Skeleton className="h-5 w-3/4" />
@@ -27,7 +27,7 @@ const LoadingCards = () =>
           <Skeleton className="h-4 w-2/3" />
         </div>
       </div>
-    )}
+  )}
   </div>;
 
 function useCountUp(start: number, target: number, duration: number = 1200) {
@@ -37,7 +37,7 @@ function useCountUp(start: number, target: number, duration: number = 1200) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => { if (entries[0].isIntersecting && !started) setStarted(true); },
+      (entries) => {if (entries[0].isIntersecting && !started) setStarted(true);},
       { threshold: 0.5 }
     );
     if (ref.current) observer.observe(ref.current);
@@ -71,7 +71,7 @@ const Index = () => {
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
     queryFn: getFilterOptions,
-    staleTime: 60 * 60 * 1000,
+    staleTime: 60 * 60 * 1000
   });
 
   const mergedFilters = { ...quizFilters, ...activeResultFilters };
@@ -83,7 +83,7 @@ const Index = () => {
       searchQuery || undefined
     ),
     enabled: mode === "results" || mode === "search",
-    staleTime: 60 * 60 * 1000,
+    staleTime: 60 * 60 * 1000
   });
 
   const handleQuizComplete = (filters: QuizFilters) => {
@@ -114,8 +114,8 @@ const Index = () => {
         <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
           <div
             className="max-w-6xl w-full rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14"
-            style={{ backgroundColor: '#111110', border: '1px solid #eeefdf' }}
-          >
+            style={{ backgroundColor: '#111110', border: '1px solid #eeefdf' }}>
+            
             {/* Logo */}
             <div className="mb-10 animate-fade-in">
               <a href="https://www.venturouscounselling.com" target="_blank" rel="noopener noreferrer">
@@ -132,9 +132,9 @@ const Index = () => {
                   fontSize: 'clamp(3.5rem, 10vw, 130px)',
                   lineHeight: '0.82',
                   letterSpacing: '-0.07em',
-                  marginBottom: '1.5rem',
-                }}
-              >
+                  marginBottom: '1.5rem'
+                }}>
+                
                 Venturous
                 <br />
                 Resource
@@ -142,9 +142,9 @@ const Index = () => {
                 Library
               </h1>
               <p
-                className="font-body leading-relaxed max-w-xl"
-                style={{ color: '#a6afc5', fontSize: '0.875rem' }}
-              >
+                className="font-body leading-relaxed max-w-xl text-xl font-semibold"
+                style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                
                 Curated resources to support you outside of session.
               </p>
             </div>
@@ -155,8 +155,8 @@ const Index = () => {
             {/* 860 Resources section */}
             <div
               className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8 animate-fade-in"
-              style={{ animationDelay: '150ms', animationFillMode: 'both' }}
-            >
+              style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
+              
               <div className="flex-1 text-left">
                 <span
                   ref={counterRef}
@@ -165,9 +165,9 @@ const Index = () => {
                     color: '#eeefdf',
                     fontSize: 'clamp(1.5rem, 3vw, 2rem)',
                     letterSpacing: '-0.05em',
-                    lineHeight: '0.9',
-                  }}
-                >
+                    lineHeight: '0.9'
+                  }}>
+                  
                   Over {resourceCount}+ resources + growing!
                 </span>
                 <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
@@ -188,12 +188,12 @@ const Index = () => {
                     color: '#111110',
                     padding: '14px 36px',
                     fontSize: '0.875rem',
-                    boxShadow: '4px 4px 0px #a6afc5',
-                  }}
-                >
-                  {filtersLoading
-                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</>
-                    : "Get Matched with Resources"}
+                    boxShadow: '4px 4px 0px #a6afc5'
+                  }}>
+                  
+                  {filtersLoading ?
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</> :
+                  "Get Matched with Resources"}
                 </button>
                 <button
                   onClick={() => setMode("search")}
@@ -204,9 +204,9 @@ const Index = () => {
                     color: '#eeefdf',
                     padding: '14px 36px',
                     fontSize: '0.875rem',
-                    boxShadow: '4px 4px 0px rgba(238,239,223,0.2)',
-                  }}
-                >
+                    boxShadow: '4px 4px 0px rgba(238,239,223,0.2)'
+                  }}>
+                  
                   <Search className="w-4 h-4" />
                   Search Resources
                 </button>
@@ -219,8 +219,8 @@ const Index = () => {
             {/* Personalized Support section */}
             <div
               className="animate-fade-in"
-              style={{ animationDelay: '250ms', animationFillMode: 'both' }}
-            >
+              style={{ animationDelay: '250ms', animationFillMode: 'both' }}>
+              
               <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
                 <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto order-2 md:order-1">
                   <a
@@ -234,9 +234,9 @@ const Index = () => {
                       color: '#eeefdf',
                       padding: '12px 28px',
                       fontSize: '0.875rem',
-                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
-                    }}
-                  >
+                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)'
+                    }}>
+                    
                     <MessageCircle className="w-4 h-4 shrink-0" />
                     Connect with a Counsellor
                   </a>
@@ -251,9 +251,9 @@ const Index = () => {
                       color: '#eeefdf',
                       padding: '12px 28px',
                       fontSize: '0.875rem',
-                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)',
-                    }}
-                  >
+                      boxShadow: '3px 3px 0px rgba(238,239,223,0.15)'
+                    }}>
+                    
                     <Heart className="w-4 h-4 shrink-0" />
                     Get Matched with a Counsellor
                   </a>
@@ -266,9 +266,9 @@ const Index = () => {
                       color: '#eeefdf',
                       fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
                       letterSpacing: '-0.05em',
-                      lineHeight: '0.9',
-                    }}
-                  >
+                      lineHeight: '0.9'
+                    }}>
+                    
                     Looking for personalized support?
                   </h3>
                   <p className="font-body leading-relaxed" style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
@@ -295,8 +295,8 @@ const Index = () => {
                 rel="noopener noreferrer"
                 style={{ color: '#eeefdf' }}
                 className="underline hover:opacity-80 transition-opacity"
-                href="https://venturous.janeapp.com/"
-              >
+                href="https://venturous.janeapp.com/">
+                
                 book a free consultation with one of our counsellors
               </a>.
               {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
@@ -305,15 +305,15 @@ const Index = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#eeefdf' }}
-                className="underline hover:opacity-80 transition-opacity"
-              >
+                className="underline hover:opacity-80 transition-opacity">
+                
                 privacy policy here
               </a>.
             </p>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   // Quiz
@@ -321,8 +321,8 @@ const Index = () => {
     return (
       <div className="grain-overlay" style={{ backgroundColor: '#FAFAF1' }}>
         <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onExit={handleReset} />
-      </div>
-    );
+      </div>);
+
   }
 
   // Search mode
@@ -355,12 +355,12 @@ const Index = () => {
         </div>
 
         {filterOptions &&
-          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>
-    );
+      </div>);
+
   }
 
   // Results mode
@@ -373,7 +373,7 @@ const Index = () => {
           </button>
           <div className="flex gap-3">
             <button
-              onClick={() => { setMode("search"); setQuizFilters({}); }}
+              onClick={() => {setMode("search");setQuizFilters({});}}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
               Search
             </button>
@@ -391,22 +391,22 @@ const Index = () => {
           </h2>
           <p className="font-body text-muted-foreground">
             {resourcesLoading ?
-              <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Finding your matches...
               </span> :
-              `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
+            `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
             }
           </p>
         </div>
 
         {filterOptions &&
-          <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
-      </div>
-    );
+      </div>);
+
   }
 
   return null;
