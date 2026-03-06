@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Quiz } from "@/components/Quiz";
 import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
-import { ArrowRight, Search, Loader2 } from "lucide-react";
+import { Search, Loader2, MessageCircle, Heart } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type AppMode = "landing" | "quiz" | "results" | "search";
+
+const RESULTS_PER_PAGE = 24;
 
 const LoadingCards = () =>
 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
@@ -18,7 +20,6 @@ const LoadingCards = () =>
     key={i}
     className="border rounded-2xl overflow-hidden bg-card animate-pulse"
     style={{ borderColor: '#3f3c18', animationDelay: `${i * 100}ms` }}>
-    
         <div className="w-full h-40 md:h-48" style={{ backgroundColor: '#a6afc5' }} />
         <div className="p-5 space-y-3">
           <Skeleton className="h-5 w-3/4" />
@@ -30,6 +31,36 @@ const LoadingCards = () =>
   )}
   </div>;
 
+function useCountUp(target: number, from: number, duration: number) {
+  const [count, setCount] = useState(from);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
+      { threshold: 0.5 }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) return;
+    const startTime = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(from + (target - from) * eased));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, [started, target, from, duration]);
+
+  return { count, ref };
+}
 
 const Index = () => {
   const [mode, setMode] = useState<AppMode>("landing");
@@ -39,13 +70,12 @@ const Index = () => {
 
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
-    queryFn: getFilterOptions
+    queryFn: getFilterOptions,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
   });
 
-  const mergedFilters = {
-    ...quizFilters,
-    ...activeResultFilters
-  };
+  const mergedFilters = { ...quizFilters, ...activeResultFilters };
 
   const { data: resources, isLoading: resourcesLoading } = useQuery({
     queryKey: ["resources", mergedFilters, searchQuery],
@@ -53,7 +83,9 @@ const Index = () => {
       Object.keys(mergedFilters).length > 0 ? mergedFilters : undefined,
       searchQuery || undefined
     ),
-    enabled: mode === "results" || mode === "search"
+    enabled: mode === "results" || mode === "search",
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
   });
 
   const handleQuizComplete = (filters: QuizFilters) => {
@@ -77,6 +109,8 @@ const Index = () => {
     setSearchQuery("");
   };
 
+  const { count: animatedCount, ref: counterRef } = useCountUp(860, 850, 1200);
+
   // Landing
   if (mode === "landing") {
     return (
@@ -99,8 +133,10 @@ const Index = () => {
             {/* 860 Resources section - text left, buttons right */}
             <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start mb-8 animate-fade-in" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
               <div className="flex-1 text-left">
-                <span className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">Over 860 resources + growing!</span>
-                <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
+                <span className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] block mb-3">
+                  Over <span ref={counterRef}>{animatedCount}</span> resources + growing!
+                </span>
+                <p className="font-body text-sm text-foreground leading-relaxed">
                   Whether you're wanting to work through difficult emotions, trying to support a loved one, or looking to expand your self-understanding, <strong>Support Link</strong> by Venturous Counselling connects you with evidence-based + research-backed resources curated by Registered Clinical Counsellors.
                 </p>
               </div>
@@ -108,15 +144,12 @@ const Index = () => {
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={filtersLoading}
-                  className="group border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
-                  
+                  className="group border border-border px-10 py-4 font-body text-sm font-semibold shadow-brutal bg-primary text-primary-foreground hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
                   {filtersLoading ? "Loading..." : "Get Matched with Resources"}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => setMode("search")}
-                  className="border border-border px-10 py-4 font-body text-base font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
-                  
+                  className="border border-border px-10 py-4 font-body text-sm font-semibold shadow-brutal bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-full flex items-center gap-2 justify-center active:scale-[0.97]">
                   <Search className="w-4 h-4" />
                   Search Resources
                 </button>
@@ -132,45 +165,32 @@ const Index = () => {
                     href="https://www.venturouscounselling.com/about/find-a-therapist/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
-                    
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-4 font-body text-sm font-semibold shadow-brutal-sm bg-accent text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
+                    <MessageCircle className="w-4 h-4" />
                     Connect with a Counsellor
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                   <a
                     href="https://form.questionscout.com/662832229f4173275fe73547"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 border border-border px-8 py-3 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
-                    
+                    className="group inline-flex items-center gap-2 border border-border px-8 py-4 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full justify-center active:scale-[0.97]">
+                    <Heart className="w-4 h-4" />
                     Get Matched with a Counsellor
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </div>
 
                 {/* Text on the right */}
                 <div className="flex-1 text-left order-1 md:order-2">
                   <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-medium tracking-[-0.06em] leading-[0.82] mb-3">Want personalized support?</h3>
-                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed">Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.
-
-                  </p>
-                  
-
-                  
-                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
-
-                  </p>
-                  <p className="font-body text-base md:text-lg text-foreground leading-relaxed mt-3">
-
-                  </p>
+                  <p className="font-body text-sm text-foreground leading-relaxed">Finding the right counsellor isn't a small thing. It's the thing. Take our 3-minute matching quiz and we'll point you toward the counsellor most suited to what you're carrying. You can also browse our team, read about each counsellor's approach, check out video introductions for a vibe check, and trust your gut.</p>
                 </div>
               </div>
             </div>
 
             <div className="border-t border-border pt-5 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
               <p className="font-body text-xs text-muted-foreground leading-relaxed text-left flex-1">
-                Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please book a free consultation with one of our counsellors at{" "}
-                <a target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors" href="https://venturous.janeapp.com/">​</a>.
+                Your answers and personal information are not collected or stored on this app. Using this app is not a replacement for individualized mental health care, counselling or therapy. If you are in need of professional support, please{" "}
+                <a href="https://venturous.janeapp.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">book a free consultation with one of our counsellors</a>.
                 {" "}If you are in crisis, please phone an emergency contact or agency you trust. Concerned about privacy? Check out our{" "}
                 <a href="https://database.venturouscounselling.com/privacy_policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">privacy policy here</a>.
               </p>
@@ -181,16 +201,14 @@ const Index = () => {
           </div>
         </div>
       </div>);
-
   }
 
   // Quiz
   if (mode === "quiz" && filterOptions) {
     return (
       <div className="grain-overlay" style={{ backgroundColor: '#FAFAF1' }}>
-        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} />
+        <Quiz filterOptions={filterOptions} onComplete={handleQuizComplete} onExit={handleReset} />
       </div>);
-
   }
 
   // Search mode
@@ -201,12 +219,18 @@ const Index = () => {
           <a href="https://www.venturouscounselling.com/our-team/" target="_blank" rel="noopener noreferrer">
             <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
           </a>
-          <button
-            onClick={() => {setMode("quiz");setSearchQuery("");}}
-            className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-            
-            Take Quiz
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleReset}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Back to Start
+            </button>
+            <button
+              onClick={() => {setMode("quiz");setSearchQuery("");}}
+              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Take Quiz
+            </button>
+          </div>
         </header>
 
         <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 max-w-2xl mx-auto">
@@ -219,7 +243,6 @@ const Index = () => {
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>);
-
   }
 
   // Results mode
@@ -234,13 +257,11 @@ const Index = () => {
             <button
               onClick={() => {setMode("search");setQuizFilters({});}}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-              
               Search
             </button>
             <button
-              onClick={() => {setMode("quiz");setQuizFilters({});}}
+              onClick={handleReset}
               className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-              
               Get Rematched
             </button>
           </div>
@@ -256,7 +277,6 @@ const Index = () => {
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Finding your matches...
               </span> :
-
             `${resources?.length || 0} resource${(resources?.length || 0) !== 1 ? "s" : ""} matched your selections`
             }
           </p>
@@ -268,7 +288,6 @@ const Index = () => {
 
         {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>);
-
   }
 
   return null;
