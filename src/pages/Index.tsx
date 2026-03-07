@@ -135,15 +135,11 @@ const Index = () => {
                   marginBottom: '1.5rem'
                 }}>
                 
-                Venturous
-                <br />
-                Resource
-                <br />
-                Library
+                Venturous Resource Library
               </h1>
               <p
-                className="font-body leading-relaxed max-w-xl text-xl font-semibold"
-                style={{ color: '#a6afc5', fontSize: '0.875rem' }}>
+                 className="font-body leading-relaxed max-w-xl font-semibold"
+                style={{ color: '#a6afc5', fontSize: '1.25rem' }}>
                 
                 Curated resources to support you outside of session.
               </p>

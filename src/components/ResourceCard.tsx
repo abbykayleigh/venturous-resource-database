@@ -136,7 +136,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
 
       {/* Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-0 rounded-2xl border bg-card" style={{ borderColor: '#3f3c18', boxShadow: '6px 6px 0px #3f3c18' }}>
+        <DialogContent className="max-w-2xl p-0 border bg-card !rounded-none sm:!rounded-none" style={{ borderColor: '#3f3c18', boxShadow: '6px 6px 0px #3f3c18', borderRadius: '16px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#FAFAF1' }}>
           <DialogTitle className="sr-only">{resource.name}</DialogTitle>
           {imageUrl ? (
             <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover rounded-t-2xl" />
