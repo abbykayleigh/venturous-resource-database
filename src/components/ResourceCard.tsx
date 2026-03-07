@@ -133,9 +133,9 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
         <DialogContent className="max-w-2xl p-0 border bg-card" style={{ borderColor: '#3f3c18', borderRadius: '16px', boxShadow: '4px 4px 0px #3f3c18', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#FAFAF1' }}>
           <DialogTitle className="sr-only">{resource.name}</DialogTitle>
           {imageUrl ? (
-            <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover rounded-t-2xl" />
+            <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover" style={{ borderRadius: '16px 16px 0 0' }} />
           ) : (
-            <div className="w-full h-56 md:h-72 flex items-center justify-center rounded-t-2xl" style={{ backgroundColor: '#a6afc5' }}>
+            <div className="w-full h-56 md:h-72 flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderRadius: '16px 16px 0 0' }}>
               <span className="font-body text-lg font-semibold text-white uppercase tracking-wider">{primaryTag}</span>
             </div>
           )}
