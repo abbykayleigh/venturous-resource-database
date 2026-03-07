@@ -108,10 +108,13 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
             />
           </div>
         ) : (
-          <div className="w-full h-40 md:h-48 border-b flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderColor: '#3f3c18' }}>
-            <span className="font-body text-sm font-semibold text-white uppercase tracking-wider text-center px-4">
-              {primaryTag}
-            </span>
+          <div className="w-full h-40 md:h-48 overflow-hidden border-b" style={{ borderColor: '#3f3c18' }}>
+            <img
+              src={getFallbackImage(tags)}
+              alt={primaryTag}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
           </div>
         )}
 
@@ -161,9 +164,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
           {imageUrl ? (
             <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover" style={{ borderRadius: '16px 16px 0 0' }} />
           ) : (
-            <div className="w-full h-56 md:h-72 flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderRadius: '16px 16px 0 0' }}>
-              <span className="font-body text-lg font-semibold text-white uppercase tracking-wider">{primaryTag}</span>
-            </div>
+            <img src={getFallbackImage(tags)} alt={primaryTag} className="w-full h-56 md:h-72 object-cover" style={{ borderRadius: '16px 16px 0 0' }} />
           )}
           <div className="p-6 space-y-4">
             <h2 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{resource.name}</h2>
