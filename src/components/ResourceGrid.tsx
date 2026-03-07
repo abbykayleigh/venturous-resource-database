@@ -8,11 +8,6 @@ interface ResourceGridProps {
 
 const RESULTS_PER_PAGE = 24;
 
-const sizePattern: Array<"normal" | "wide" | "tall" | "large"> = [
-  "wide", "normal", "normal", "tall",
-  "normal", "normal", "wide", "normal",
-  "normal", "normal",
-];
 
 export function ResourceGrid({ resources }: ResourceGridProps) {
   const [visibleCount, setVisibleCount] = useState(RESULTS_PER_PAGE);
@@ -35,16 +30,16 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
 
   return (
     <div className="px-6 md:px-16 lg:px-24 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div style={{ columnCount: 2, columnGap: '1.5rem' }} className="md:[column-count:3] lg:[column-count:4]">
         {visible.map((resource, i) => (
           <div
             key={resource.id}
-            className="animate-fade-in"
-            style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}
+            className="animate-fade-in break-inside-avoid mb-6"
+            style={{ animationDelay: `${Math.min(i, 12) * 80}ms`, animationFillMode: 'both' }}
           >
             <ResourceCard
               resource={resource}
-              size={sizePattern[i % sizePattern.length]}
+              size="normal"
               index={i}
             />
           </div>

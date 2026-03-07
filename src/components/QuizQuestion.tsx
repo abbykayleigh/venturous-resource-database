@@ -96,12 +96,12 @@ export function QuizQuestion({
                     "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl active:scale-[0.97]",
                     questionNumber === 2 ? "animate-fade-in" : "",
                   isSelected
-                      ? "scale-[1.03] text-white"
+                      ? "scale-[1.03]"
                       : "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
                   )}
                   style={{
                     ...staggerStyle,
-                    ...(isSelected ? { backgroundColor: '#bc4322', borderColor: '#bc4322' } : {}),
+                    ...(isSelected ? { backgroundColor: '#3f3c18', borderColor: '#3f3c18', color: '#eeefdf' } : {}),
                   }}
                 >
                   {displayLabel}
