@@ -8,11 +8,6 @@ interface ResourceGridProps {
 
 const RESULTS_PER_PAGE = 24;
 
-const sizePattern: Array<"normal" | "wide" | "tall" | "large"> = [
-  "wide", "normal", "normal", "tall",
-  "normal", "normal", "wide", "normal",
-  "normal", "normal",
-];
 
 export function ResourceGrid({ resources }: ResourceGridProps) {
   const [visibleCount, setVisibleCount] = useState(RESULTS_PER_PAGE);

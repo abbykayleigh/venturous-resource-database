@@ -24,12 +24,6 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const sizeClasses = {
-    normal: "",
-    wide: "md:col-span-2",
-    tall: "md:row-span-2",
-    large: "md:col-span-2 md:row-span-2",
-  };
 
   // IntersectionObserver: only fetch Microlink when visible
   useEffect(() => {
@@ -71,7 +65,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
       <div
         ref={cardRef}
         onClick={() => setModalOpen(true)}
-        className={`cursor-pointer group border bg-card flex flex-col overflow-hidden rounded-2xl transition-all duration-200 hover:-translate-y-[3px] active:scale-[0.97] ${sizeClasses[size]}`}
+        className={`cursor-pointer group border bg-card flex flex-col overflow-hidden rounded-2xl transition-all duration-200 hover:-translate-y-[3px] active:scale-[0.97]`}
         style={{
           borderColor: '#3f3c18',
           boxShadow: '4px 4px 0px #3f3c18',
