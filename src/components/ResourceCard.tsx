@@ -3,6 +3,32 @@ import type { Resource } from "@/lib/notion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
 
+import fallbackDefault from "@/assets/fallback/default.jpg";
+import fallbackBook from "@/assets/fallback/book.jpg";
+import fallbackPodcast from "@/assets/fallback/podcast.jpg";
+import fallbackVideo from "@/assets/fallback/video.jpg";
+import fallbackOnlineResource from "@/assets/fallback/online-resource.jpg";
+import fallbackExercises from "@/assets/fallback/exercises.jpg";
+import fallbackOneOnOne from "@/assets/fallback/one-on-one.jpg";
+import fallbackCommunity from "@/assets/fallback/community.jpg";
+
+const FALLBACK_IMAGES: Record<string, string> = {
+  "Book": fallbackBook,
+  "Podcast": fallbackPodcast,
+  "Video": fallbackVideo,
+  "Online Resources / App": fallbackOnlineResource,
+  "Exercises + Reflection Prompts": fallbackExercises,
+  "One-on-One Support with a Practitioner": fallbackOneOnOne,
+  "Community Connection Support": fallbackCommunity,
+};
+
+function getFallbackImage(tags: string[]): string {
+  for (const tag of tags) {
+    if (FALLBACK_IMAGES[tag]) return FALLBACK_IMAGES[tag];
+  }
+  return fallbackDefault;
+}
+
 interface ResourceCardProps {
   resource: Resource;
   size?: "normal" | "wide" | "tall" | "large";
