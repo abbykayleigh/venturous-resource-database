@@ -3,6 +3,32 @@ import type { Resource } from "@/lib/notion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
 
+import fallbackDefault from "@/assets/fallback/default.jpg";
+import fallbackBook from "@/assets/fallback/book.jpg";
+import fallbackPodcast from "@/assets/fallback/podcast.jpg";
+import fallbackVideo from "@/assets/fallback/video.jpg";
+import fallbackOnlineResource from "@/assets/fallback/online-resource.jpg";
+import fallbackExercises from "@/assets/fallback/exercises.jpg";
+import fallbackOneOnOne from "@/assets/fallback/one-on-one.jpg";
+import fallbackCommunity from "@/assets/fallback/community.jpg";
+
+const FALLBACK_IMAGES: Record<string, string> = {
+  "Book": fallbackBook,
+  "Podcast": fallbackPodcast,
+  "Video": fallbackVideo,
+  "Online Resources / App": fallbackOnlineResource,
+  "Exercises + Reflection Prompts": fallbackExercises,
+  "One-on-One Support with a Practitioner": fallbackOneOnOne,
+  "Community Connection Support": fallbackCommunity,
+};
+
+function getFallbackImage(tags: string[]): string {
+  for (const tag of tags) {
+    if (FALLBACK_IMAGES[tag]) return FALLBACK_IMAGES[tag];
+  }
+  return fallbackDefault;
+}
+
 interface ResourceCardProps {
   resource: Resource;
   size?: "normal" | "wide" | "tall" | "large";
@@ -82,10 +108,13 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
             />
           </div>
         ) : (
-          <div className="w-full h-40 md:h-48 border-b flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderColor: '#3f3c18' }}>
-            <span className="font-body text-sm font-semibold text-white uppercase tracking-wider text-center px-4">
-              {primaryTag}
-            </span>
+          <div className="w-full h-40 md:h-48 overflow-hidden border-b" style={{ borderColor: '#3f3c18' }}>
+            <img
+              src={getFallbackImage(tags)}
+              alt={primaryTag}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
           </div>
         )}
 
@@ -135,9 +164,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
           {imageUrl ? (
             <img src={imageUrl} alt={resource.name} className="w-full h-56 md:h-72 object-cover" style={{ borderRadius: '16px 16px 0 0' }} />
           ) : (
-            <div className="w-full h-56 md:h-72 flex items-center justify-center" style={{ backgroundColor: '#a6afc5', borderRadius: '16px 16px 0 0' }}>
-              <span className="font-body text-lg font-semibold text-white uppercase tracking-wider">{primaryTag}</span>
-            </div>
+            <img src={getFallbackImage(tags)} alt={primaryTag} className="w-full h-56 md:h-72 object-cover" style={{ borderRadius: '16px 16px 0 0' }} />
           )}
           <div className="p-6 space-y-4">
             <h2 className="font-display text-2xl md:text-3xl font-medium tracking-[-0.02em]">{resource.name}</h2>
