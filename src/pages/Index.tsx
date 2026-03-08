@@ -335,11 +335,14 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <BackToTop />
-        {/* Mobile header: logo centered, buttons below */}
+        {/* Mobile header: logo, search bar, then buttons */}
         <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
             <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
           </button>
+          <div className="w-full max-w-[320px]">
+            <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+          </div>
           <div className="flex gap-3">
             <button
               onClick={handleReset}
@@ -378,8 +381,9 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-8 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
-          <div className="w-full max-w-[260px] md:max-w-[500px]">
+        {/* Desktop/tablet search bar */}
+        <div className="hidden md:flex px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 justify-center">
+          <div className="w-full max-w-[500px]">
             <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
           </div>
         </div>
