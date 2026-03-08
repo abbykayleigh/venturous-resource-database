@@ -400,10 +400,11 @@ const Index = () => {
   if (mode === "results") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
+        <BackToTop />
         {/* Mobile header: logo centered, buttons below */}
         <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -437,8 +438,8 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 text-center animate-fade-in">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 text-center animate-fade-in">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
           <p className="font-body text-muted-foreground">
