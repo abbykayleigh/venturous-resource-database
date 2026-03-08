@@ -4,6 +4,7 @@ import { Quiz } from "@/components/Quiz";
 import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
+import { BackToTop } from "@/components/BackToTop";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
 import { Search, Loader2, Heart, MessageCircle } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
@@ -81,13 +82,15 @@ const Index = () => {
 
   const mergedFilters = { ...quizFilters, ...activeResultFilters };
 
+  const hasSearched = searchQuery.length > 0;
+
   const { data: resources, isLoading: resourcesLoading } = useQuery({
     queryKey: ["resources", mergedFilters, searchQuery],
     queryFn: () => queryResources(
       Object.keys(mergedFilters).length > 0 ? mergedFilters : undefined,
       searchQuery || undefined
     ),
-    enabled: mode === "results" || mode === "search",
+    enabled: mode === "results" || (mode === "search" && hasSearched),
     staleTime: 60 * 60 * 1000
   });
 
@@ -116,6 +119,7 @@ const Index = () => {
   if (mode === "landing") {
     return (
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#111110' }}>
+        <BackToTop />
         <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
           <div
             className="max-w-6xl w-full rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14"
@@ -330,10 +334,11 @@ const Index = () => {
   if (mode === "search") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
+        <BackToTop />
         {/* Mobile header: logo centered, buttons below */}
         <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -373,15 +378,21 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 max-w-2xl mx-auto">
-          <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
+          <div className="w-full" style={{ maxWidth: '500px' }}>
+            <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+          </div>
         </div>
 
         {filterOptions &&
         <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
-        {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
+        {!hasSearched ? (
+          <div className="text-center py-16 font-body text-muted-foreground">
+            Enter a search term to find resources
+          </div>
+        ) : resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>);
 
   }
@@ -390,10 +401,11 @@ const Index = () => {
   if (mode === "results") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
+        <BackToTop />
         {/* Mobile header: logo centered, buttons below */}
         <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -427,8 +439,8 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 text-center animate-fade-in">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 text-center animate-fade-in">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
           <p className="font-body text-muted-foreground">

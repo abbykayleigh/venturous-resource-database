@@ -30,6 +30,7 @@ export function Quiz({ filterOptions, onComplete, onExit }: QuizProps) {
     setTimeout(() => {
       setStep(next);
       setAnimating(false);
+      window.scrollTo(0, 0);
     }, 250);
   };
 

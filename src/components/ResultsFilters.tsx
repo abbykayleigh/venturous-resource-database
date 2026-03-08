@@ -33,7 +33,7 @@ export function ResultsFilters({ filterOptions, activeFilters, onFiltersChange }
   const displayLabel = (label: string) => isCompact ? getShortLabel(label) : label;
 
   return (
-    <div className="px-6 md:px-16 lg:px-24 pb-3">
+    <div className="px-6 md:px-16 lg:px-24 pb-1">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-4">
           <button
