@@ -30,7 +30,7 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
 
   return (
     <div className="px-6 md:px-16 lg:px-24 py-16">
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-6">
+      <div className="columns-1 md:columns-2 lg:columns-4 gap-6">
         {visible.map((resource, i) => (
           <div
             key={resource.id}

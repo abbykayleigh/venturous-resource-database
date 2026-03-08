@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import type { Resource } from "@/lib/notion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
+import { useIsCompact } from "@/hooks/use-compact";
+import { getShortLabel } from "@/lib/labels";
 
 import fallbackDefault from "@/assets/fallback/default.jpg";
 import fallbackBook from "@/assets/fallback/book.jpg";
@@ -49,9 +51,8 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
   const [microlinkLoaded, setMicrolinkLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const isCompact = useIsCompact();
 
-
-  // IntersectionObserver: only fetch Microlink when visible
   useEffect(() => {
     if (!cardRef.current) return;
     const observer = new IntersectionObserver(
@@ -85,6 +86,8 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
 
   const tags = resource.resourceTypes || [];
   const primaryTag = tags[0] || resource.name.charAt(0);
+
+  const displayTag = (tag: string) => isCompact ? getShortLabel(tag) : tag;
 
   return (
     <>
@@ -135,7 +138,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
                     className="inline-block text-xs font-body font-semibold uppercase tracking-wider rounded-full"
                     style={{ backgroundColor: color.bg, color: color.text, padding: '5px 12px' }}
                   >
-                    {tag}
+                    {displayTag(tag)}
                   </span>
                 );
               })}
@@ -174,7 +177,7 @@ export function ResourceCard({ resource, size = "normal", index = 0 }: ResourceC
                   const color = TAG_COLORS[i % TAG_COLORS.length];
                   return (
                     <span key={tag} className="inline-block text-xs font-body font-semibold uppercase tracking-wider rounded-full" style={{ backgroundColor: color.bg, color: color.text, padding: '5px 12px' }}>
-                      {tag}
+                      {displayTag(tag)}
                     </span>
                   );
                 })}
