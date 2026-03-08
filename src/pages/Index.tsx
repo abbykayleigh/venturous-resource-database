@@ -82,13 +82,15 @@ const Index = () => {
 
   const mergedFilters = { ...quizFilters, ...activeResultFilters };
 
+  const hasSearched = searchQuery.length > 0;
+
   const { data: resources, isLoading: resourcesLoading } = useQuery({
     queryKey: ["resources", mergedFilters, searchQuery],
     queryFn: () => queryResources(
       Object.keys(mergedFilters).length > 0 ? mergedFilters : undefined,
       searchQuery || undefined
     ),
-    enabled: mode === "results" || mode === "search",
+    enabled: mode === "results" || (mode === "search" && hasSearched),
     staleTime: 60 * 60 * 1000
   });
 
