@@ -4,6 +4,7 @@ import { Quiz } from "@/components/Quiz";
 import { SearchBar } from "@/components/SearchBar";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { ResultsFilters } from "@/components/ResultsFilters";
+import { BackToTop } from "@/components/BackToTop";
 import { getFilterOptions, queryResources, type QuizFilters, type FilterOptions } from "@/lib/notion";
 import { Search, Loader2, Heart, MessageCircle } from "lucide-react";
 import venturousLogo from "@/assets/venturous-logo.png";
