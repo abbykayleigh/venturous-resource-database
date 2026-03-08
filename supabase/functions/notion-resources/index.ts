@@ -3,6 +3,20 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+// Simple in-memory cache
+const cache: Record<string, { data: any; timestamp: number }> = {};
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getCached(key: string) {
+  const entry = cache[key];
+  if (entry && Date.now() - entry.timestamp < CACHE_TTL) return entry.data;
+  return null;
+}
+
+function setCache(key: string, data: any) {
+  cache[key] = { data, timestamp: Date.now() };
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -28,7 +42,19 @@ Deno.serve(async (req) => {
       ] as any[],
     };
 
+    const responseHeaders = {
+      ...corsHeaders,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=300, s-maxage=300',
+    };
+
     if (action === 'get-filter-options') {
+      const cacheKey = 'filter-options';
+      const cached = getCached(cacheKey);
+      if (cached) {
+        return new Response(JSON.stringify(cached), { headers: responseHeaders });
+      }
+
       const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID, baseFilter);
       const demographics = new Set<string>();
       const categoryTags = new Set<string>();
@@ -53,13 +79,14 @@ Deno.serve(async (req) => {
         }
       }
 
-      return new Response(JSON.stringify({
+      const result = {
         demographics: [...demographics].sort(),
         categoryTags: [...categoryTags].sort(),
         resourceTypes: [...resourceTypes].sort(),
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      };
+      setCache(cacheKey, result);
+
+      return new Response(JSON.stringify(result), { headers: responseHeaders });
     }
 
     if (action === 'query') {
@@ -93,7 +120,11 @@ Deno.serve(async (req) => {
         }
       }
 
-      const allEntries = await fetchAllEntries(NOTION_API_KEY, DATABASE_ID, notionFilter);
+      const cacheKey = `query:${JSON.stringify(notionFilter)}`;
+      const cached = getCached(cacheKey);
+      let allEntries = cached || await fetchAllEntries(NOTION_API_KEY, DATABASE_ID, notionFilter);
+      if (!cached) setCache(cacheKey, allEntries);
+
       let results = allEntries;
 
       if (searchQuery) {
@@ -116,9 +147,7 @@ Deno.serve(async (req) => {
         image: getFileUrl(page.properties.Image),
       }));
 
-      return new Response(JSON.stringify({ results: mapped }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return new Response(JSON.stringify({ results: mapped }), { headers: responseHeaders });
     }
 
     return new Response(JSON.stringify({ error: 'Invalid action' }), {

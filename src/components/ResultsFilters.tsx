@@ -2,6 +2,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import type { FilterOptions, QuizFilters } from "@/lib/notion";
+import { useIsCompact } from "@/hooks/use-compact";
+import { getShortLabel } from "@/lib/labels";
 
 interface ResultsFiltersProps {
   filterOptions: FilterOptions;
@@ -11,6 +13,7 @@ interface ResultsFiltersProps {
 
 export function ResultsFilters({ filterOptions, activeFilters, onFiltersChange }: ResultsFiltersProps) {
   const [expanded, setExpanded] = useState(false);
+  const isCompact = useIsCompact();
 
   const toggle = (key: keyof QuizFilters, value: string) => {
     const current = activeFilters[key] || [];
@@ -27,8 +30,10 @@ export function ResultsFilters({ filterOptions, activeFilters, onFiltersChange }
 
   const hasFilters = Object.values(activeFilters).some((v) => v && v.length > 0);
 
+  const displayLabel = (label: string) => isCompact ? getShortLabel(label) : label;
+
   return (
-    <div className="px-6 md:px-16 lg:px-24 pb-6">
+    <div className="px-6 md:px-16 lg:px-24 pb-3">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-4">
           <button
@@ -55,18 +60,21 @@ export function ResultsFilters({ filterOptions, activeFilters, onFiltersChange }
               options={filterOptions.demographics}
               selected={activeFilters.demographics || []}
               onToggle={(v) => toggle("demographics", v)}
+              displayLabel={displayLabel}
             />
             <FilterSection
               label="Category"
               options={filterOptions.categoryTags}
               selected={activeFilters.categoryTags || []}
               onToggle={(v) => toggle("categoryTags", v)}
+              displayLabel={displayLabel}
             />
             <FilterSection
               label="Resource Type"
               options={filterOptions.resourceTypes}
               selected={activeFilters.resourceTypes || []}
               onToggle={(v) => toggle("resourceTypes", v)}
+              displayLabel={displayLabel}
             />
           </div>
         )}
@@ -80,11 +88,13 @@ function FilterSection({
   options,
   selected,
   onToggle,
+  displayLabel,
 }: {
   label: string;
   options: string[];
   selected: string[];
   onToggle: (value: string) => void;
+  displayLabel: (label: string) => string;
 }) {
   if (options.length === 0) return null;
 
@@ -103,7 +113,7 @@ function FilterSection({
                 : "bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none shadow-brutal-sm"
             )}
           >
-            {option}
+            {displayLabel(option)}
           </button>
         ))}
       </div>

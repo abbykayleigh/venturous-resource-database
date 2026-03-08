@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 type AppMode = "landing" | "quiz" | "results" | "search";
 
 const LoadingCards = () =>
-<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-16">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-6 md:px-16 lg:px-24 py-8">
     {Array.from({ length: 8 }).map((_, i) =>
   <div
     key={i}
@@ -67,6 +67,11 @@ const Index = () => {
   const [activeResultFilters, setActiveResultFilters] = useState<QuizFilters>({});
 
   const { count: resourceCount, ref: counterRef } = useCountUp(850, 860);
+
+  // Scroll to top on mode change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [mode]);
 
   const { data: filterOptions, isLoading: filtersLoading } = useQuery({
     queryKey: ["filter-options"],
@@ -325,9 +330,31 @@ const Index = () => {
   if (mode === "search") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
-        <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-8 flex items-center justify-between">
+        {/* Mobile header: logo centered, buttons below */}
+        <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleReset}
+              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Back to Start
+            </button>
+            <a
+              href="https://www.venturouscounselling.com/about/find-a-therapist/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+              <MessageCircle className="w-4 h-4" />
+              Counsellor
+            </a>
+          </div>
+        </header>
+        {/* Desktop/tablet header */}
+        <header className="hidden md:flex px-6 md:px-16 lg:px-24 pt-12 pb-4 items-center justify-between">
+          <button onClick={handleReset}>
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -346,7 +373,7 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 max-w-2xl mx-auto">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 max-w-2xl mx-auto">
           <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
         </div>
 
@@ -363,9 +390,28 @@ const Index = () => {
   if (mode === "results") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
-        <header className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 sm:pt-12 pb-4 flex items-center justify-between">
+        {/* Mobile header: logo centered, buttons below */}
+        <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-8 md:h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {setMode("search");setQuizFilters({});}}
+              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Search
+            </button>
+            <button
+              onClick={handleReset}
+              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+              Get Rematched
+            </button>
+          </div>
+        </header>
+        {/* Desktop/tablet header */}
+        <header className="hidden md:flex px-6 md:px-16 lg:px-24 pt-12 pb-4 items-center justify-between">
+          <button onClick={handleReset}>
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -381,7 +427,7 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pb-8 text-center animate-fade-in">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 text-center animate-fade-in">
           <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
