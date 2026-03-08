@@ -119,6 +119,7 @@ const Index = () => {
   if (mode === "landing") {
     return (
       <div className="grain-overlay min-h-screen flex flex-col" style={{ backgroundColor: '#111110' }}>
+        <BackToTop />
         <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-16 lg:px-24 pt-12 pb-10">
           <div
             className="max-w-6xl w-full rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14"
