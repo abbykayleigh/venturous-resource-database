@@ -443,7 +443,7 @@ const Index = () => {
         </div>
 
         {/* Mobile buttons below "Your Results" */}
-        <div className="md:hidden flex justify-center gap-3 pt-2 pb-3">
+        <div className="md:hidden flex justify-center gap-3 pt-2 pb-6">
           <button
             onClick={() => {setMode("search");setQuizFilters({});}}
             className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
