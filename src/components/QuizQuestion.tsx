@@ -93,7 +93,7 @@ export function QuizQuestion({
                   key={option}
                   onClick={() => onToggle(option)}
                   className={cn(
-                    "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl active:scale-[0.97]",
+                    "border border-border p-5 md:p-6 text-center font-body text-sm md:text-base font-medium shadow-brutal transition-all duration-150 rounded-2xl active:scale-[0.97] overflow-hidden break-words hyphens-auto",
                     questionNumber === 2 ? "animate-fade-in" : "",
                   isSelected
                       ? "scale-[1.03]"
