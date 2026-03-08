@@ -35,7 +35,7 @@ export function ResultsFilters({ filterOptions, activeFilters, onFiltersChange }
   return (
     <div className="px-6 md:px-16 lg:px-24 pb-0">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-2">
           <button
             onClick={() => setExpanded(!expanded)}
             className="flex items-center gap-2 font-body text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"

@@ -378,8 +378,8 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
-          <div className="w-full max-w-[500px]">
+        <div className="px-8 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
+          <div className="w-full max-w-[320px] md:max-w-[500px]">
             <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
           </div>
         </div>
@@ -427,7 +427,7 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-2 md:pb-8 text-center animate-fade-in">
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-2 md:pt-12 pb-2 md:pb-8 text-center animate-fade-in">
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-medium tracking-[-0.05em] mb-2">
             Your Results
           </h2>
@@ -443,7 +443,7 @@ const Index = () => {
         </div>
 
         {/* Mobile buttons below "Your Results" */}
-        <div className="md:hidden flex justify-center gap-3 pb-3">
+        <div className="md:hidden flex justify-center gap-3 pt-2 pb-3">
           <button
             onClick={() => {setMode("search");setQuizFilters({});}}
             className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
