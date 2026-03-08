@@ -379,7 +379,7 @@ const Index = () => {
         </header>
 
         <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
-          <div className="w-full" style={{ maxWidth: '500px' }}>
+          <div className="w-full max-w-[500px]">
             <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
           </div>
         </div>

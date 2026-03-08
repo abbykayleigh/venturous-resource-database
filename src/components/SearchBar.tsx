@@ -15,7 +15,7 @@ export function SearchBar({ onSearch, initialQuery = "" }: SearchBarProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="w-full mx-auto">
       <div className="flex border border-border shadow-brutal bg-card rounded-full overflow-hidden">
         <input
           type="text"
