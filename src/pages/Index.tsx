@@ -335,68 +335,134 @@ const Index = () => {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
         <BackToTop />
-        {/* Mobile header: logo, search bar, then buttons */}
-        <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
-          <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
-          </button>
-          <div className="w-full max-w-[320px]">
-            <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleReset}
-              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-              Back to Start
-            </button>
-            <a
-              href="https://www.venturouscounselling.com/about/find-a-therapist/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              Counsellor
-            </a>
-          </div>
-        </header>
-        {/* Desktop/tablet header */}
-        <header className="hidden md:flex px-6 md:px-16 lg:px-24 pt-12 pb-4 items-center justify-between">
-          <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
-          </button>
-          <div className="flex gap-3">
-            <button
-              onClick={handleReset}
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
-              Back to Start
-            </button>
-            <a
-              href="https://www.venturouscounselling.com/about/find-a-therapist/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              Connect with a Counsellor
-            </a>
-          </div>
-        </header>
-
-        {/* Desktop/tablet search bar */}
-        <div className="hidden md:flex px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 justify-center">
-          <div className="w-full max-w-[500px]">
-            <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
-          </div>
-        </div>
-
-        {filterOptions &&
-        <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
-        }
-
+        
         {!hasSearched ? (
-          <div className="text-center py-16 font-body text-muted-foreground">
-            Enter a search term to find resources
-          </div>
-        ) : resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
+          // Centered layout when no search has been entered
+          <>
+            {/* Mobile centered */}
+            <div className="md:hidden min-h-screen flex flex-col justify-center items-center px-4 py-8">
+              <div className="flex flex-col items-center gap-4 w-full max-w-md">
+                <button onClick={handleReset}>
+                  <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
+                </button>
+                <div className="w-full max-w-[320px]">
+                  <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleReset}
+                    className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+                    Back to Start
+                  </button>
+                  <a
+                    href="https://www.venturouscounselling.com/about/find-a-therapist/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    Counsellor
+                  </a>
+                </div>
+                {filterOptions && (
+                  <div className="w-full mt-4">
+                    <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Desktop/tablet centered */}
+            <div className="hidden md:block">
+              <header className="px-6 md:px-16 lg:px-24 pt-12 pb-4 flex items-center justify-between">
+                <button onClick={handleReset}>
+                  <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleReset}
+                    className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+                    Back to Start
+                  </button>
+                  <a
+                    href="https://www.venturouscounselling.com/about/find-a-therapist/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    Connect with a Counsellor
+                  </a>
+                </div>
+              </header>
+              <div className="min-h-[60vh] flex flex-col justify-center items-center px-6 md:px-16 lg:px-24">
+                <div className="w-full max-w-[500px]">
+                  <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          // Top layout when search has been entered
+          <>
+            {/* Mobile header: logo, search bar, then buttons */}
+            <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
+              <button onClick={handleReset}>
+                <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
+              </button>
+              <div className="w-full max-w-[320px]">
+                <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleReset}
+                  className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+                  Back to Start
+                </button>
+                <a
+                  href="https://www.venturouscounselling.com/about/find-a-therapist/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-border px-5 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  Counsellor
+                </a>
+              </div>
+            </header>
+            {/* Desktop/tablet header */}
+            <header className="hidden md:flex px-6 md:px-16 lg:px-24 pt-12 pb-4 items-center justify-between">
+              <button onClick={handleReset}>
+                <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleReset}
+                  className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-card hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97]">
+                  Back to Start
+                </button>
+                <a
+                  href="https://www.venturouscounselling.com/about/find-a-therapist/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-border px-6 py-2 font-body text-sm font-semibold shadow-brutal-sm bg-primary text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all rounded-full active:scale-[0.97] inline-flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  Connect with a Counsellor
+                </a>
+              </div>
+            </header>
+
+            {/* Desktop/tablet search bar */}
+            <div className="hidden md:flex px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 justify-center">
+              <div className="w-full max-w-[500px]">
+                <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+              </div>
+            </div>
+
+            {filterOptions &&
+            <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
+            }
+
+            {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
+          </>
+        )}
       </div>);
 
   }
