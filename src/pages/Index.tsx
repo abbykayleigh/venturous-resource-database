@@ -333,10 +333,11 @@ const Index = () => {
   if (mode === "search") {
     return (
       <div className="grain-overlay min-h-screen" style={{ backgroundColor: '#FAFAF1' }}>
+        <BackToTop />
         {/* Mobile header: logo centered, buttons below */}
         <header className="md:hidden px-4 pt-8 pb-4 flex flex-col items-center gap-4">
           <button onClick={handleReset}>
-            <img src={venturousLogo} alt="Venturous Counselling" className="h-10 w-auto" />
+            <img src={venturousLogo} alt="Venturous Counselling" className="h-14 w-auto" />
           </button>
           <div className="flex gap-3">
             <button
@@ -376,15 +377,21 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-8 md:pt-12 pb-8 max-w-2xl mx-auto">
-          <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+        <div className="px-4 sm:px-6 md:px-16 lg:px-24 pt-6 md:pt-12 pb-6 md:pb-8 flex justify-center">
+          <div className="w-full" style={{ maxWidth: '500px' }}>
+            <SearchBar onSearch={handleSearch} initialQuery={searchQuery} />
+          </div>
         </div>
 
         {filterOptions &&
         <ResultsFilters filterOptions={filterOptions} activeFilters={activeResultFilters} onFiltersChange={setActiveResultFilters} />
         }
 
-        {resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
+        {!hasSearched ? (
+          <div className="text-center py-16 font-body text-muted-foreground">
+            Enter a search term to find resources
+          </div>
+        ) : resourcesLoading ? <LoadingCards /> : <ResourceGrid resources={resources || []} />}
       </div>);
 
   }
