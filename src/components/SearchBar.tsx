@@ -27,7 +27,7 @@ export function SearchBar({ onSearch, initialQuery = "" }: SearchBarProps) {
           <span
             aria-hidden="true"
             className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 overflow-hidden font-body text-base text-muted-foreground sm:hidden"
-            style={{ maxWidth: "calc(100% - 70px)" }}
+            style={{ maxWidth: "calc(100% - 110px)" }}
           >
             <span className="animate-marquee">
               {PLACEHOLDER}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{PLACEHOLDER}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
