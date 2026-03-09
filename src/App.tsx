@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { getFilterOptions } from "@/lib/notion";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -16,6 +17,13 @@ function ScrollToTop() {
 }
 
 const queryClient = new QueryClient();
+
+// Prefetch filter options immediately so the quiz button is ready faster
+queryClient.prefetchQuery({
+  queryKey: ["filter-options"],
+  queryFn: getFilterOptions,
+  staleTime: 60 * 60 * 1000,
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
