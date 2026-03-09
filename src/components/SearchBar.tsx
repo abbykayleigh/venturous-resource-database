@@ -44,8 +44,7 @@ export function SearchBar({ onSearch, initialQuery = "" }: SearchBarProps) {
           /* Hide native placeholder on mobile (marquee takes over); show on sm+ */
           placeholder={PLACEHOLDER}
           className="flex-1 px-6 py-4 bg-transparent font-body text-base focus:outline-none
-            placeholder:text-muted-foreground
-            placeholder:hidden sm:placeholder:block"
+            placeholder:text-transparent sm:placeholder:text-muted-foreground"
         />
         <button
           type="submit"
